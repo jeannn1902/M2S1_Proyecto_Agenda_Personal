@@ -100,3 +100,64 @@ textarea {
     color: #cdd6f4;
     resize: vertical;
 }
+
+/* Tarjetas de contactos */
+.lista-contactos {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+.tarjeta-contacto {
+    background-color: #1e1e2e;
+    padding: 15px;
+    border-radius: 8px;
+    border-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #45475a;
+}
+
+/* ========================================================= LEER =========================================== */
+.info-contacto h4 {
+    margin: 0 0 5px 0;
+    color: #cdd6f4;
+}
+
+.info-contacto p {
+    margin: 3px 0;
+    font-size: 14px;
+    color: #a6adc8;
+}
+
+.etiqueta-relacion {
+    background-color: #45475a;
+    color: #89b4fa;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 8px;
+    font-weight: normal;
+}
+
+.boton-eliminar {
+    color: #f38ba8;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    border: 1px solid #f38ba8;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.boton-eliminar:hover {
+    background-color: #f38ba8;
+    color: #11111b;
+}
+
+.sin-contactos {
+    color: #a6adc8;
+    font-style: italic;
+    text-align: center;
+}

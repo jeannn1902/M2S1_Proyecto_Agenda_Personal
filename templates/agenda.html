@@ -47,7 +47,20 @@
         <section class="seccion-lista">
             <h3>Mis Contactos</h3>
             <ul class="lista-contactos">
-                <!-- Enlistado de contactos (pendiente) -->
+                {% for contacto in contactos %}
+                    <li class="tarjeta-contacto">
+                        <div class="info-contacto">
+                            <h4>{{ contacto[1] }} {% if contacto[4] %}<span class="etiqueta-relacion">{{ contacto[4] }}</span>{% endif %}</h4>
+                            <p>📞 {{ contacto[2] }}</p>
+                            {% if contacto[3] %}
+                                <p>✉️ {{ contacto[3] }}</p>
+                            {% endif %}
+                        </div>
+                        <a href="/eliminar_contacto/{{ contacto[0] }}", class="boton-eliminar">Eliminar</a>
+                    </li>
+                {% else %}
+                    <p class="sin-contactos">No tienes contactos guardados aún.</p>
+                {% endfor %}
             </ul>
         </section>
     </div>
