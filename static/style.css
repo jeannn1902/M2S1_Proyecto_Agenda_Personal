@@ -1,0 +1,57 @@
+/* ================================================== BODY ================================================== */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e2e;
+    color: #cdd6f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* ================================================ GENERAL ================================================ */
+.contenedor {
+    background-color: #313244;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    width: 320px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid #45475a;
+    border-radius: 5px;
+    background-color: #1e1e2e;
+    color: #cdd6f4;
+}
+
+/* Botón principal */
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    background-color: #89b4fa;
+    color: #11111b;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Enlace de registro */
+.texto-enlace {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.texto-enlace a {
+    color: #89b4fa;
+    text-decoration: none;
+    font-weight: bold;
+}
