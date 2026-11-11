@@ -55,3 +55,48 @@ button {
     text-decoration: none;
     font-weight: bold;
 }
+
+/* ================================================ AGENDA ================================================ */
+/* Layout del panel principal de agenda */
+.contenedor-agenda {
+    background-color: #313244;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 700px;
+    margin: 20px auto;
+}
+
+.encabezado-agenda {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #45475a;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.encabezado-agenda h1 {
+    font-size: 30px;
+    margin: 0;
+}
+
+.boton-cerrar {
+    color: #b9375c;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid #45475a;
+    border-radius: 5px;
+    background-color: #1e1e2e;
+    color: #cdd6f4;
+    resize: vertical;
+}

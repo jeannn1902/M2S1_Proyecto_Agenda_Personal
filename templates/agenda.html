@@ -4,14 +4,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda Personal - Principal</title>
+    <title>Agenda Personal - Contactos</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
+    <div class="contenedor-agenda">
+        <header class="encabezado-agenda">
+            <h1>Bienvenido, {{ nombre }}</h1>
+            <a href="/logout" class="boton-cerrar">Cerrar Sesión</a>
+        </header>
 
-    
-    
+        <section class="seccion-formulario">
+            <h3>Agregar Nuevo Contacto</h3>
+            <form action="/agregar_contacto" method="POST">
+                <input
+                    type="text"
+                    name="nombre_contacto"
+                    placeholder="Nombre completo"
+                    required>
+
+                <input
+                    type="tel"
+                    name="telefono"
+                    placeholder="Teléfono"
+                    required>
+
+                <input
+                    type="email"
+                    name="correo_contacto"
+                    placeholder="Correo Electrónico (opcional)">
+
+                <input
+                    type="text"
+                    name="relacion"
+                    placeholder="Parentesco (ej. Familiar, Amigo, Trabajo)">
+
+                <button type="submit">Guardar Contacto</button>
+            </form>
+        </section>
+
+        <section class="seccion-lista">
+            <h3>Mis Contactos</h3>
+            <ul class="lista-contactos">
+                <!-- Enlistado de contactos (pendiente) -->
+            </ul>
+        </section>
+    </div>
 </body>
 
 </html>
