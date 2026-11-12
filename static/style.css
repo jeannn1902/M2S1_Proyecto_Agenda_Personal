@@ -1,3 +1,4 @@
+
 /* ================================================== BODY ================================================== */
 body {
     font-family: Arial, sans-serif;
@@ -160,4 +161,68 @@ textarea {
     color: #a6adc8;
     font-style: italic;
     text-align: center;
+}
+
+/* ================================================ INICIO (Landing Page) ================================================ */
+.contenedor-inicio {
+    max-width: 650px;
+    margin: 80px auto;
+    padding: 40px;
+    background-color: #1e1e2e;
+    border-radius: 12px;
+    border: 1px solid #45475a;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.encabezado-inicio h2 {
+    color: #89b4fa;
+    margin-bottom: 25px;
+    font-size: 24px;
+}
+
+.contenido-inicio h1 {
+    color: #cdd6f4;
+    font-size: 26px;
+    margin-bottom: 15px;
+}
+
+.contenido-inicio p {
+    color: #a6adc8;
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 30px;
+}
+
+.botones-inicio {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.boton-inicio {
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 15px;
+    transition: all 0.2 ease;
+}
+
+.boton-inicio.primario {
+    background-color: #89b4fa;
+    color: #11111b;
+}
+
+.boton-inicio.primario:hover {
+    background-color: #b4befe;
+}
+
+.boton-inicio.secundario {
+    background-color: transparent;
+    color: #cdd6f4;
+    border: 1px solid #45475a;
+}
+
+.boton-inicio.secundario:hover {
+    background-color: #313244;
 }

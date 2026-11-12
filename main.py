@@ -2,9 +2,12 @@ from flask import Flask, redirect, render_template, request, session, url_for
 
 from base_datos.conexion_db import crear_tablas
 from base_datos.consultas import (
+    actualizar_contacto,
     agregar_contacto,
     eliminar_contacto,
+    existe_telefono,
     iniciar_sesion,
+    obtener_contacto_por_id,
     obtener_contactos,
     registrar_usuario,
 )
@@ -16,6 +19,10 @@ crear_tablas()
 
 
 @app.route("/")
+def vista_inicio():
+    return render_template("inicio.html")
+
+
 @app.route("/login")
 def vista_login():
     return render_template("login.html")
@@ -60,9 +67,16 @@ def vista_agenda():
     if "usuario_id" not in session:
         return redirect(url_for("vista_login"))
 
-    contactos = obtener_contactos(session["usuario_id"])
+    busqueda = request.args.get("q", "").strip()
+    mensaje_error = request.args.get("error", "")
+    contactos = obtener_contactos(session["usuario_id"], busqueda)
+
     return render_template(
-        "agenda.html", nombre=session["usuario_nombre"], contactos=contactos
+        "agenda.html",
+        nombre=session["usuario_nombre"],
+        contactos=contactos,
+        busqueda=busqueda,
+        error=mensaje_error,
     )
 
 
@@ -71,13 +85,51 @@ def procesar_agregar_contacto():
     if "usuario_id" not in session:
         return redirect(url_for("vista_login"))
 
-    nombre = request.form["nombre_contacto"]
-    telefono = request.form["telefono"]
-    correo = request.form["correo_contacto"]
-    relacion = request.form["relacion"]
+    nombre = request.form["nombre_contacto"].strip()
+    telefono = request.form["telefono"].strip()
+    correo = request.form["correo_contacto"].strip()
+    relacion = request.form["relacion"].strip()
+    usuario_id = session["usuario_id"]
 
-    agregar_contacto(session["usuario_id"], nombre, telefono, correo, relacion)
+    # Validación de número telefónico duplicado
+    if existe_telefono(usuario_id, telefono):
+        return redirect(
+            url_for("vista_agenda", error="El número de teléfono ya está en tu agenda.")
+        )
+
+    agregar_contacto(usuario_id, nombre, telefono, correo, relacion)
     return redirect(url_for("vista_agenda"))
+
+
+@app.route("/editar_contacto/<int:contacto_id>", methods=["GET", "POST"])
+def editar_contacto(contacto_id):
+    if "usuario_id" not in session:
+        return redirect(url_for("vista_login"))
+
+    usuario_id = session["usuario_id"]
+    contacto = obtener_contacto_por_id(contacto_id, usuario_id)
+
+    if not contacto:
+        return redirect(url_for("vista_agenda"))
+
+    if request.method == "POST":
+        nombre = request.form["nombre_contacto"].strip()
+        telefono = request.form["telefono"].strip()
+        correo = request.form["correo_contacto"].strip()
+        relacion = request.form["relacion"].strip()
+
+        # Validar teléfono duplicado excluyendo el registro actual que se edita
+        if existe_telefono(usuario_id, telefono, contacto_id_excluir=contacto_id):
+            return render_template(
+                "editar.html",
+                contacto=contacto,
+                error="Este número de teléfono ya pertenece a otro contacto.",
+            )
+
+        actualizar_contacto(contacto_id, usuario_id, nombre, telefono, correo, relacion)
+        return redirect(url_for("vista_agenda"))
+
+    return render_template("editar.html", contacto=contacto)
 
 
 @app.route("/eliminar_contacto/<int:contacto_id>")
@@ -93,7 +145,6 @@ def procesar_eliminar_contacto(contacto_id):
 def logout():
     session.clear()
     return redirect(url_for("vista_login"))
-
 
 
 if __name__ == "__main__":

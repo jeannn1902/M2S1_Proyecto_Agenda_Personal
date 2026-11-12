@@ -57,6 +57,11 @@ def existe_telefono(usuario_id, telefono, contacto_id_excluir=None):
     cursor = conexion.cursor()
     if contacto_id_excluir:
         cursor.execute(
+            "SELECT id FROM contactos WHERE usuario_id = ? AND telefono = ? AND id != ?",
+            (usuario_id, telefono, contacto_id_excluir),
+        )
+    else:
+        cursor.execute(
             "SELECT id FROM contactos WHERE usuario_id = ? AND telefono = ?",
             (usuario_id, telefono),
         )
@@ -66,25 +71,26 @@ def existe_telefono(usuario_id, telefono, contacto_id_excluir=None):
 
 
 def obtener_contactos(usuario_id, busqueda=""):
-    """Obtiene contactos del usuario con opción de filtrado por búsqueda."""
+    """Reemplaza la versión anterior: obtiene contactos con opción de filtro por búsqueda."""
     conexion = conectar()
     cursor = conexion.cursor()
     if busqueda:
         patron = f"%{busqueda}%"
         cursor.execute(
             """
-            SELECT id, nombre, telefono, correo, categoria
-            FROM contactos
+            SELECT id, nombre, telefono, correo, categoria 
+            FROM contactos 
             WHERE usuario_id = ? AND (nombre LIKE ? OR categoria LIKE ? OR telefono LIKE ?)
+            ORDER BY nombre ASC
             """,
-            (usuario_id, patron, patron, patron)
+            (usuario_id, patron, patron, patron),
         )
     else:
         cursor.execute(
             """
-            SELECT id, nombre, telefono, correo, categoria
-            FROM contactos
-            WHERE usuario_id = ?
+            SELECT id, nombre, telefono, correo, categoria 
+            FROM contactos 
+            WHERE usuario_id = ? 
             ORDER BY nombre ASC
             """,
             (usuario_id,),
@@ -95,7 +101,7 @@ def obtener_contactos(usuario_id, busqueda=""):
 
 
 def obtener_contacto_por_id(contacto_id, usuario_id):
-    """Obtiene un único contacto verificando la propiedad del usuario."""    
+    """Obtiene un único contacto para poder cargarlo en el formulario de edición."""
     conexion = conectar()
     cursor = conexion.cursor()
     cursor.execute(
@@ -108,20 +114,20 @@ def obtener_contacto_por_id(contacto_id, usuario_id):
 
 
 def actualizar_contacto(contacto_id, usuario_id, nombre, telefono, correo, categoria):
-    """Actualiza la información de un contacto existente."""
+    """Guarda los cambios de un contacto editado en la base de datos."""
     conexion = conectar()
     cursor = conexion.cursor()
     cursor.execute(
         """
-        UPDATE contactos
-        SET nombre = ?, telefono = ?, correo = ?, categoria = ?
+        UPDATE contactos 
+        SET nombre = ?, telefono = ?, correo = ?, categoria = ? 
         WHERE id = ? AND usuario_id = ?
         """,
         (nombre, telefono, correo, categoria, contacto_id, usuario_id),
     )
     conexion.commit()
     conexion.close()
-    
+
 
 def eliminar_contacto(contacto_id, usuario_id):
 
