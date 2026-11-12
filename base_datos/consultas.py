@@ -71,7 +71,7 @@ def existe_telefono(usuario_id, telefono, contacto_id_excluir=None):
 
 
 def obtener_contactos(usuario_id, busqueda=""):
-    """Reemplaza la versión anterior: obtiene contactos con opción de filtro por búsqueda."""
+    """Obtiene contactos con opción de filtro por búsqueda."""
     conexion = conectar()
     cursor = conexion.cursor()
     if busqueda:
@@ -101,7 +101,7 @@ def obtener_contactos(usuario_id, busqueda=""):
 
 
 def obtener_contacto_por_id(contacto_id, usuario_id):
-    """Obtiene un único contacto para poder cargarlo en el formulario de edición."""
+    """Obtiene un único contacto verificando la propiedad del usuario."""
     conexion = conectar()
     cursor = conexion.cursor()
     cursor.execute(
@@ -114,7 +114,7 @@ def obtener_contacto_por_id(contacto_id, usuario_id):
 
 
 def actualizar_contacto(contacto_id, usuario_id, nombre, telefono, correo, categoria):
-    """Guarda los cambios de un contacto editado en la base de datos."""
+    """Actualiza la información de un contacto existente."""
     conexion = conectar()
     cursor = conexion.cursor()
     cursor.execute(

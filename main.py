@@ -118,7 +118,7 @@ def editar_contacto(contacto_id):
         correo = request.form["correo_contacto"].strip()
         relacion = request.form["relacion"].strip()
 
-        # Validar teléfono duplicado excluyendo el registro actual que se edita
+        # Validar teléfono duplicado excluyendo el registro actual
         if existe_telefono(usuario_id, telefono, contacto_id_excluir=contacto_id):
             return render_template(
                 "editar.html",
