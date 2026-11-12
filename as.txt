@@ -1,76 +1,83 @@
-def existe_telefono(usuario_id, telefono, contacto_id_excluir=None):
-    """Verifica si un número de teléfono ya está registrado por el mismo usuario."""
-    conexion = conectar()
-    cursor = conexion.cursor()
-    if contacto_id_excluir:
-        cursor.execute(
-            "SELECT id FROM contactos WHERE usuario_id = ? AND telefono = ? AND id != ?",
-            (usuario_id, telefono, contacto_id_excluir),
-        )
-    else:
-        cursor.execute(
-            "SELECT id FROM contactos WHERE usuaio_id = ? AND telefono = ?",
-            (usuario_id, telefono),
-        )
-    existe = cursor.fetchone() is not None
-    conexion.close()
-    return existe
+<!DOCTYPE html>
+<html lang="es">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Personal - Contactos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 
-def obtener_contactos(usuario_id, busqueda=""):
-    """Obtiene contactos del usuario con opción de filtrado por búsqueda."""
-    conexion = conectar()
-    cursor = conexion.cursor()
-    if busqueda:
-        patron = f"%{busqueda}%"
-        cursor.execute(
-            """
-            SELECT id, nombre, telefono, correo, categoria 
-            FROM contactos 
-            WHERE usuario_id = ? AND (nombre LIKE ? OR categoria LIKE ? OR telefono LIKE ?)
-            ORDER BY nombre ASC
-            """,
-            (usuario_id, patron, patron, patron),
-        )
-    else:
-        cursor.execute(
-            """
-            SELECT id, nombre, telefono, correo, categoria 
-            FROM contactos 
-            WHERE usuario_id = ? 
-            ORDER BY nombre ASC
-            """,
-            (usuario_id,),
-        )
-    contactos = cursor.fetchall()
-    conexion.close()
-    return contactos
+<body>
+    <div class="contenedor-agenda">
+        <header class="encabezado-agenda">
+            <h1>Bienvenido, {{ nombre }}</h1>
+            <a href="/logout" class="boton-cerrar">Cerrar Sesión</a>
+        </header>
 
+        {% if error %}
+            <div class="alerta-error">⚠️ {{ error }}</div>
+        {% endif %}
 
-def obtener_contacto_por_id(contacto_id, usuario_id):
-    """Obtiene un único contacto verificando la propiedad del usuario."""
-    conexion = conectar()
-    cursor = conexion.cursor()
-    cursor.execute(
-        "SELECT id, nombre, telefono, correo, categoria FROM contactos WHERE id = ? AND usuario_id = ?",
-        (contacto_id, usuario_id),
-    )
-    contacto = cursor.fetchone()
-    conexion.close()
-    return contacto
+        <section class="seccion-formulario">
+            <h3>Agregar Nuevo Contacto</h3>
+            <form action="/agregar_contacto" method="POST">
+                <input type="text" name="nombre_contacto" placeholder="Nombre completo" required>
+                <input type="tel" name="telefono" placeholder="Teléfono" required>
+                <input type="email" name="correo_contacto" placeholder="Correo Electrónico (opcional)">
+                <input type="text" name="relacion" placeholder="Parentesco (ej. Familiar, Amigo, Trabajo)">
+                <button type="submit">Guardar Contacto</button>
+            </form>
+        </section>
 
+        <section class="seccion-lista">
+            <h3>Mis Contactos</h3>
 
-def actualizar_contacto(contacto_id, usuario_id, nombre, telefono, correo, categoria):
-    """Actualiza la información de un contacto existente."""
-    conexion = conectar()
-    cursor = conexion.cursor()
-    cursor.execute(
-        """
-        UPDATE contactos 
-        SET nombre = ?, telefono = ?, correo = ?, categoria = ? 
-        WHERE id = ? AND usuario_id = ?
-        """,
-        (nombre, telefono, correo, categoria, contacto_id, usuario_id),
-    )
-    conexion.commit()
-    conexion.close()
+            <!-- Buscador de contactos -->
+            <form action="/agenda" method="GET" class="form-buscador">
+                <input type="text" name="q" placeholder="Buscar por nombre, teléfono o relación..." value="{{ busqueda }}">
+                <button type="submit" class="boton-buscar">Buscar</button>
+                {% if busqueda %}
+                    <a href="/agenda" class="boton-limpiar">Limpiar</a>
+                {% endif %}
+            </form>
+
+            <ul class="lista-contactos">
+                {% for contacto in contactos %}
+                    <li class="tarjeta-contacto">
+                        <div class="info-contacto">
+                            <h4>
+                                {{ contacto[1] }} 
+                                {% if contacto[4] %}
+                                    <span class="etiqueta-relacion">{{ contacto[4] }}</span>
+                                {% endif %}
+                            </h4>
+                            <p>📞 {{ contacto[2] }}</p>
+                            {% if contacto[3] %}
+                                <p>✉️ {{ contacto[3] }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="acciones-contacto">
+                            <a href="/editar_contacto/{{ contacto[0] }}" class="boton-editar">Editar</a>
+                            <a href="/eliminar_contacto/{{ contacto[0] }}" 
+                               class="boton-eliminar" 
+                               onclick="return confirm('¿Estás seguro de que deseas eliminar a {{ contacto[1] }}?');">
+                               Eliminar
+                            </a>
+                        </div>
+                    </li>
+                {% else %}
+                    <p class="sin-contactos">
+                        {% if busqueda %}
+                            No se encontraron contactos que coincidan con "{{ busqueda }}".
+                        {% else %}
+                            No tienes contactos guardados aún.
+                        {% endif %}
+                    </p>
+                {% endfor %}
+            </ul>
+        </section>
+    </div>
+</body>
+
+</html>

@@ -120,6 +120,70 @@ textarea {
     border: 1px solid #45475a;
 }
 
+/* alertas de error */
+.alerta-error {
+    background-color: #f38ba8;
+    color: #11111b;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* formulario de busqueda */
+.form-buscador {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.form-buscador input {
+    margin: 0;
+}
+
+.boton-buscar {
+    width: auto;
+    padding: 0 15px;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.boton-limpiar {
+    color: #a6adc8;
+    text-decoration: none;
+    align-self: center;
+    font-size: 13px;
+    padding-left: 5px;
+}
+
+.boton-contacto {
+    display: flex;
+    gap: 8px;
+}
+
+.boton-editar {
+    color: #89b4fa;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    border: 1px solid #89b4fa;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.boton-editar:hover {
+    background-color: #89b4fa;
+    color: #11111b;
+}
+
+label {
+    display: block;
+    color: #cdd6f4;
+    font-size: 13px;
+    margin-top: 10px;
+}
+
 /* ========================================================= LISTA DE CONTACTOS =========================================== */
 .info-contacto h4 {
     margin: 0 0 5px 0;
