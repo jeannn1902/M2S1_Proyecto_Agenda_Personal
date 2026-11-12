@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Contacto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="contenedor-agenda">
+        <header class="encabezado-agenda">
+            <h1>Editar Contacto</h1>
+            <a href="/agenda" class="boton-cerrar">>← Cancelar</a>
+        </header>
+
+        {% if error %}
+            <div class="alerta-error">⚠️ {{ error }}</div>
+        {% endif %}
+
+        <form action="/editar_contacto/{{ contacto[0] }}" method="POST">
+            <label>Nombre Completo:</label>
+            <input
+                type="text"
+                name="nombre_contacto"
+                value="{{ contacto[1] }}"
+                required>
+
+            <label>Teléfono:</label>
+            <input
+                type="tel"
+                name="telefono"
+                value="{{ contacto[2] }}"
+                required>
+
+            <label>Correo Electrónico:</label>
+            <input
+                type="email"
+                name="correo_contacto"
+                value="{{ contacto[3] if contacto[3] else '' }}">
+
+            <label>Parentesco / Relación:</label>
+            <input 
+                type="text"
+                name="relacion"
+                value="{{ contacto[4] if contacto[4] else '' }}">
+            
+            <button type="submit">Actualizar Contacto</button>
+        </form>
+    </div>
+    
+</body>
+
+</html>
