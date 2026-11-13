@@ -11,7 +11,7 @@
 <body>
     <div class="contenedor">
         <h2>Crear Cuenta</h2>
-        <form action="/registro" method="POST">
+        <form action="{{ url_for('procesar_registro') }}" method="POST">
             <input
                 type="text"
                 name="nombre"
@@ -32,7 +32,7 @@
 
             <button type="submit">Registrarse</button>
         </form>
-        <p class="texto-enlace">¿Ya tienes cuenta? <a href="/login">Inicia Sesión</a></p>
+        <p class="texto-enlace">¿Ya tienes cuenta? <a href="{{ url_for('vista_login') }}">Inicia Sesión</a></p>
     </div>
 </body>
 </html>

@@ -12,14 +12,14 @@
     <div class="contenedor-agenda">
         <header class="encabezado-agenda">
             <h1>Editar Contacto</h1>
-            <a href="/agenda" class="boton-cerrar">← Cancelar</a>
+            <a href="{{ url_for('vista_agenda') }}" class="boton-cerrar">← Cancelar</a>
         </header>
 
         {% if error %}
             <div class="alerta-error">⚠️ {{ error }}</div>
         {% endif %}
 
-        <form action="/editar_contacto/{{ contacto[0] }}" method="POST">
+        <form action="{{ url_for('editar_contacto', contacto_id=contacto[0]) }}" method="POST">
             <label>Nombre Completo:</label>
             <input
                 type="text"

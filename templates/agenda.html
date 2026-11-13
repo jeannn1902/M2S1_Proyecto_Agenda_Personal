@@ -12,7 +12,7 @@
     <div class="contenedor-agenda">
         <header class="encabezado-agenda">
             <h1>Bienvenido, {{ nombre }}</h1>
-            <a href="/logout" class="boton-cerrar">Cerrar Sesión</a>
+            <a href="{{ url_for('logout') }}" class="boton-cerrar">Cerrar Sesión</a>
         </header>
 
         {% if error %}
@@ -21,7 +21,7 @@
 
         <section class="seccion-formulario">
             <h3>Agregar Nuevo Contacto</h3>
-            <form action="/agregar_contacto" method="POST">
+            <form action="{{ url_for('procesar_agregar_contacto') }}" method="POST">
                 <input 
                     type="text" 
                     name="nombre_contacto" 
@@ -51,7 +51,7 @@
         <section class="seccion-lista">
             <h3>Mis Contactos</h3>
 
-            <form action="/agenda" method="GET" class="form-buscador">
+            <form action="{{ url_for('vista_agenda') }}" method="GET" class="form-buscador">
                 <input 
                     type="text" 
                     name="q" 
@@ -60,7 +60,7 @@
 
                 <button type="submit" class="boton-buscar">Buscar</button>
                 {% if busqueda %}
-                    <a href="/agenda" class="boton-limpiar">Limpiar</a>
+                    <a href="{{ url_for('vista_agenda') }}" class="boton-limpiar">Limpiar</a>
                 {% endif %}
             </form>
 
@@ -80,8 +80,8 @@
                             {% endif %}
                         </div>
                         <div class="acciones-contacto">
-                            <a href="/editar_contacto/{{ contacto[0] }}" class="boton-editar">Editar</a>
-                            <a href="/eliminar_contacto/{{ contacto[0] }}" 
+                            <a href="{{ url_for('editar_contacto', contacto_id=contacto[0]) }}" class="boton-editar">Editar</a>
+                            <a href="{{ url_for('procesar_eliminar_contacto', contacto_id=contacto[0]) }}" 
                                class="boton-eliminar" 
                                onclick="return confirm('¿Estás seguro de que deseas eliminar a {{ contacto[1] }}?');">
                                Eliminar
