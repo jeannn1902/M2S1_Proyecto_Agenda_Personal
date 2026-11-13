@@ -1,0 +1,10 @@
+# --- Compilación y binarios ---
+base_datos/__pycache__/
+
+# --- Markdowns y txt ---
+as.txt
+explanation_structure.md
+product_backlog.md
+
+# --- carpetas ---
+mds_txt/
