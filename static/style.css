@@ -1,9 +1,23 @@
 
+/* ================================================== VARIABLES ================================================== */
+:root {
+    --bg-principal: #1e1e2e;
+    --bg-tarjeta: #313244;
+    --borde-sutil: #45445a;
+    --texto-principal: #cdd6f4;
+    --texto-secundario: #a6adc8;
+    --texto-oscuro: #11111b;
+    --acento-primario: #89b4fa;
+    --acento-hover: #b4befe;
+    --peligro: #f38ba8;
+    --cerrar-sesion: #b9375c;
+}
+
 /* ================================================== BODY ================================================== */
 body {
     font-family: Arial, sans-serif;
-    background-color: #1e1e2e;
-    color: #cdd6f4;
+    background-color: var(--bg-principal);
+    color: var(--texto-principal);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,7 +27,7 @@ body {
 
 /* ================================================ GENERAL ================================================ */
 .contenedor {
-    background-color: #313244;
+    background-color: var(--bg-tarjeta);
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -25,10 +39,15 @@ input {
     padding: 10px;
     margin: 8px 0;
     box-sizing: border-box;
-    border: 1px solid #45475a;
+    border: 1px solid var(--borde-sutil);
     border-radius: 5px;
-    background-color: #1e1e2e;
-    color: #cdd6f4;
+    background-color: var(--bg-principal);
+    color: var(--texto-principal);
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--acento-primario);
 }
 
 /* Botón principal */
@@ -36,12 +55,17 @@ button {
     width: 100%;
     padding: 10px;
     margin-top: 15px;
-    background-color: #89b4fa;
-    color: #11111b;
+    background-color: var(--acento-primario);
+    color: var(--texto-oscuro);
     border: none;
     border-radius: 5px;
     font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: var(--acento-hover);
 }
 
 /* Enlace de registro */
@@ -52,15 +76,14 @@ button {
 }
 
 .texto-enlace a {
-    color: #89b4fa;
+    color: var(--acento-primario);
     text-decoration: none;
     font-weight: bold;
 }
 
 /* ================================================ AGENDA ================================================ */
-/* Layout del panel principal de agenda */
 .contenedor-agenda {
-    background-color: #313244;
+    background-color: var(--bg-tarjeta);
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -73,7 +96,7 @@ button {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #45475a;
+    border-bottom: 1px solid var(--borde-sutil);
     padding-bottom: 15px;
     margin-bottom: 20px;
 }
@@ -84,45 +107,26 @@ button {
 }
 
 .boton-cerrar {
-    color: #b9375c;
+    color: var(--cerrar-sesion);
     text-decoration: none;
     font-size: 14px;
     font-weight: bold;
 }
 
-/* Secciones de la agenda */
 .seccion-formulario {
-    border-bottom: 1px solid #45475a;
+    border-bottom: 1px solid var(--borde-sutil);
     padding-bottom: 20px;
     margin-bottom: 20px;
 }
 
-.seccion-lista h3 {
+.seccion-lista h3 { 
     margin-top: 0;
 }
 
-/* Tarjetas de contactos */
-.lista-contactos {
-    list-style: none;
-    padding: 0;
-    margin-top: 15px;
-}
-
-.tarjeta-contacto {
-    background-color: #1e1e2e;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid #45475a;
-}
-
-/* alertas de error */
+/* Alertas de error */
 .alerta-error {
-    background-color: #f38ba8;
-    color: #11111b;
+    background-color: var(--peligro);
+    color: var(--texto-oscuro);
     padding: 10px 15px;
     border-radius: 6px;
     margin-bottom: 15px;
@@ -130,14 +134,15 @@ button {
     font-size: 14px;
 }
 
-/* formulario de busqueda */
+/* Formulario de búsqueda */
 .form-buscador {
     display: flex;
     gap: 8px;
     margin-bottom: 15px;
 }
 
-.form-buscador input {
+.form-buscador input,
+.boton-buscar {
     margin: 0;
 }
 
@@ -149,55 +154,45 @@ button {
 }
 
 .boton-limpiar {
-    color: #a6adc8;
+    color: var(--texto-secundario);
     text-decoration: none;
     align-self: center;
     font-size: 13px;
     padding-left: 5px;
 }
 
-.acciones-contacto {
-    display: flex;
-    gap: 8px;
-}
-
-.boton-editar {
-    color: #89b4fa;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: bold;
-    border: 1px solid #89b4fa;
-    padding: 5px 10px;
-    border-radius: 5px;
-}
-
-.boton-editar:hover {
-    background-color: #89b4fa;
-    color: #11111b;
-}
-
-label {
-    display: block;
-    color: #cdd6f4;
-    font-size: 13px;
-    margin-top: 10px;
-}
-
 /* ========================================================= LISTA DE CONTACTOS =========================================== */
+.lista-contactos {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
+
+.tarjeta-contacto {
+    background-color: var(--bg-principal);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--borde-sutil);
+}
+
 .info-contacto h4 {
     margin: 0 0 5px 0;
-    color: #cdd6f4;
+    color: var(--texto-principal);
 }
 
 .info-contacto p {
     margin: 3px 0;
     font-size: 14px;
-    color: #a6adc8;
+    color: var(--texto-secundario);
 }
 
 .etiqueta-relacion {
-    background-color: #45475a;
-    color: #89b4fa;
+    background-color: var(--borde-sutil);
+    color: var(--acento-primario);
     font-size: 12px;
     padding: 2px 8px;
     border-radius: 12px;
@@ -205,25 +200,53 @@ label {
     font-weight: normal;
 }
 
+.acciones-contacto {
+    display: flex;
+    gap: 8px;
+}
+
+.boton-editar,
 .boton-eliminar {
-    color: #f38ba8;
     text-decoration: none;
     font-size: 13px;
     font-weight: bold;
-    border: 1px solid #f38ba8;
     padding: 5px 10px;
     border-radius: 5px;
+    transition: all 0.2s ease;
+}
+
+.boton-editar {
+    color: var(--acento-primario);
+    border: 1px solid var(--acento-primario);
+}
+
+.boton-editar:hover {
+    background-color: var(--acento-primario);
+    color: var(--texto-oscuro);
+}
+
+.boton-eliminar {
+    color: var(--peligro);
+    border: 1px solid var(--peligro);
 }
 
 .boton-eliminar:hover {
-    background-color: #f38ba8;
-    color: #11111b;
+    background-color: var(--peligro);
+    color: var(--texto-oscuro);
 }
 
 .sin-contactos {
-    color: #a6adc8;
+    color: var(--texto-secundario);
     font-style: italic;
     text-align: center;
+}
+
+/* ================================================ EDICIÓN ================================================ */
+label {
+    display: block;
+    color: var(--texto-principal);
+    font-size: 13px;
+    margin-top: 10px;
 }
 
 /* ================================================ INICIO (Landing Page) ================================================ */
@@ -231,33 +254,39 @@ label {
     max-width: 650px;
     margin: 80px auto;
     padding: 40px;
-    background-color: #1e1e2e;
+    background-color: var(--bg-principal);
     border-radius: 12px;
-    border: 1px solid #45475a;
+    border: 1px solid var(--borde-sutil);
     text-align: center;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .encabezado-inicio h2 {
-    color: #89b4fa;
+    color: var(--acento-primario);
     margin-bottom: 25px;
     font-size: 24px;
 }
 
 .contenido-inicio h1 {
-    color: #cdd6f4;
+    color: var(--texto-principal);
     font-size: 26px;
     margin-bottom: 15px;
 }
 
 .contenido-inicio p {
-    color: #a6adc8;
+    color: var(--texto-secundario);
     font-size: 15px;
     line-height: 1.5;
     margin-bottom: 30px;
 }
 
 .botones-inicio {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.boton-inicio {
     padding: 12px 24px;
     border-radius: 6px;
     text-decoration: none;
@@ -266,29 +295,21 @@ label {
     transition: all 0.2s ease;
 }
 
-.boton-inicio {
-    padding: 12px 24px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 15px;
-    transition: all 0.2 ease;
-}
-
 .boton-inicio.primario {
-    background-color: #89b4fa;
-    color: #11111b;
+    background-color: var(--acento-primario);
+    color: var(--texto-oscuro);
 }
 
 .boton-inicio.primario:hover {
-    background-color: #b4befe;
+    background-color: var(--acento-hover);
 }
 
 .boton-inicio.secundario {
     background-color: transparent;
-    color: #cdd6f4;
-    border: 1px solid #45475a;
+    color: var(--texto-principal);
+    border: 1px solid var(--borde-sutil);
 }
 
 .boton-inicio.secundario:hover {
-    background-color: #313244;
+    background-color: var(--bg-tarjeta);
 }
