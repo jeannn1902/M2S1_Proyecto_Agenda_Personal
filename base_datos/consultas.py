@@ -1,3 +1,5 @@
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from base_datos.conexion_db import conectar
 
 
@@ -5,13 +7,14 @@ from base_datos.conexion_db import conectar
 # FUNCIONES DE USUARIOS
 # ==========================================
 def registrar_usuario(nombre, correo, password):
-    """Registra un nuevo usuario en la base de datos."""
+    """Registra un nuevo usuario en la base de datos con contraseña hasheada."""
     conexion = conectar()
     cursor = conexion.cursor()
+    password_hash = generate_password_hash(password)
     try:
         cursor.execute(
             "INSERT INTO usuarios (nombre, correo, password) VALUES (?, ?, ?)",
-            (nombre, correo, password)
+            (nombre, correo, password_hash)
         )
         conexion.commit()
         return True, "Usuario registrado con éxito."
@@ -22,16 +25,40 @@ def registrar_usuario(nombre, correo, password):
 
 
 def iniciar_sesion(correo, password):
-    """Verifica credenciales y regresa los datos del usuario si son correctos."""
+    """Verifica credenciales mediante hash y migra cuentas antiguas si es necesario."""
     conexion = conectar()
     cursor = conexion.cursor()
     cursor.execute(
-        "SELECT id, nombre, correo FROM usuarios WHERE correo = ? AND password = ?",
-        (correo, password)
+        "SELECT id, nombre, correo, password FROM usuarios WHERE correo = ?",
+        (correo,)
     )
     usuario = cursor.fetchone()
+
+    if not usuario:
+        conexion.close()
+        return None
+
+    password_almacenado = usuario[3]
+
+    # Caso 1: La contraseña ya tiene formato de hash
+    if password_almacenado.startswith(("scrypt:", "pbkdf2:")):
+        valido = check_password_hash(password_almacenado, password)
+    else:
+        # Caso 2: Cuenta antigua en texto plano -> validar y migrar a hash
+        valido = (password_almacenado == password)
+        if valido:
+            nuevo_hash = generate_password_hash(password)
+            cursor.execute(
+                "UPDATE usuarios SET password = ? WHERE id = ?",
+                (nuevo_hash, usuario[0])
+            )
+            conexion.commit()
+
     conexion.close()
-    return usuario
+
+    if valido:
+        return (usuario[0], usuario[1], usuario[2])
+    return None
 
 # ==========================================
 # FUNCIONES DE CONTACTOS
