@@ -1,10 +1,25 @@
-# --- Compilación y binarios ---
-base_datos/__pycache__/
+# Variables de entorno locales
+.env
 
-# --- Markdowns y txt ---
+# Caché y compilados de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entornos virtuales
+venv/
+env/
+.venv/
+
+# Base de datos local
+*.db
+*agenda.db
+*.sqlite3
+
+# Markdowns
 as.txt
 explanation_structure.md
 product_backlog.md
 
-# --- carpetas ---
-mds_txt/
+# Carpetas
+mds_txt/x

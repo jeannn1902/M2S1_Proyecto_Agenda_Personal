@@ -1,3 +1,7 @@
+import os
+import secrets
+from datetime import timedelta
+
 from flask import Flask, redirect, render_template, request, session, url_for
 
 from base_datos.conexion_db import crear_tablas
@@ -12,8 +16,35 @@ from base_datos.consultas import (
     registrar_usuario,
 )
 
+
+def cargar_variables_entorno(ruta=".env"):
+    """Lee el archivo .env local si existe y carga sus claves en os.environ."""
+    if not os.path.exists(ruta):
+        return
+    with open(ruta, encoding="utf-8") as archivo:
+        for linea in archivo:
+            linea = linea.strip()
+            if not linea or linea.startswith("#") or "=" not in linea:
+                continue
+            clave, valor = linea.split("=", 1)
+            os.environ.setdefault(clave.strip(), valor.strip())
+
+
+cargar_variables_entorno()
+
 app = Flask(__name__)
-app.secret_key = "clave_secreta_agenda"
+
+# Clave secreta leída desde entorno
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY") or secrets.token_hex(32)
+
+# Configuración segura de cookies de sesión
+modo_debug = os.environ.get("FLASK_DEBUG", "False").lower() == "true"
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE="Lax",
+    SESSION_COOKIE_SECURE=not modo_debug,
+    PERMANENT_SESSION_LIFETIME=timedelta(hours=2),
+)
 
 crear_tablas()
 
@@ -49,12 +80,14 @@ def procesar_registro():
 
 @app.route("/login", methods=["POST"])
 def procesar_login():
-    correo = request.form["correo"]
+    correo = request.form["correo"].strip()
     password = request.form["password"]
 
     usuario = iniciar_sesion(correo, password)
 
     if usuario:
+        session.clear()
+        session.permanent = True
         session["usuario_id"] = usuario[0]
         session["usuario_nombre"] = usuario[1]
         return redirect(url_for("vista_agenda"))
@@ -141,6 +174,16 @@ def procesar_eliminar_contacto(contacto_id):
     return redirect(url_for("vista_agenda"))
 
 
+@app.after_request
+def evitar_cache_rutas_privadas(response):
+    """Evita que el navegador guarde en caché vistas privadas mientras hay sesión activa."""
+    if "usuario_id" in session:
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+    return response
+
+
 @app.route("/logout")
 def logout():
     session.clear()
@@ -148,4 +191,4 @@ def logout():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=modo_debug)
