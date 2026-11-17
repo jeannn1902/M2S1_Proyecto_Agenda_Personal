@@ -23,3 +23,6 @@ product_backlog.md
 
 # Carpetas
 mds_txt/x
+
+# Configuraciones locales
+*.json

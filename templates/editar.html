@@ -20,6 +20,8 @@
         {% endif %}
 
         <form action="{{ url_for('editar_contacto', contacto_id=contacto[0]) }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
             <label>Nombre Completo:</label>
             <input
                 type="text"

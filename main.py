@@ -1,8 +1,10 @@
 import os
 import secrets
 from datetime import timedelta
+from functools import wraps
 
 from flask import Flask, redirect, render_template, request, session, url_for
+from flask_wtf.csrf import CSRFProtect
 
 from base_datos.conexion_db import crear_tablas
 from base_datos.consultas import (
@@ -46,7 +48,18 @@ app.config.update(
     PERMANENT_SESSION_LIFETIME=timedelta(hours=2),
 )
 
+csrf = CSRFProtect(app)
 crear_tablas()
+
+
+def login_requerido(funcion_vista):
+    """Decorador que protege rutas privadas verificando una sesión activa."""
+    @wraps(funcion_vista)
+    def envoltura(*args, **kwargs):
+        if "usuario_id" not in session:
+            return redirect(url_for("vista_login"))
+        return funcion_vista(*args, **kwargs)
+    return envoltura
 
 
 @app.route("/")
@@ -96,10 +109,8 @@ def procesar_login():
 
 
 @app.route("/agenda")
+@login_requerido
 def vista_agenda():
-    if "usuario_id" not in session:
-        return redirect(url_for("vista_login"))
-
     busqueda = request.args.get("q", "").strip()
     mensaje_error = request.args.get("error", "")
     contactos = obtener_contactos(session["usuario_id"], busqueda)
@@ -114,10 +125,8 @@ def vista_agenda():
 
 
 @app.route("/agregar_contacto", methods=["POST"])
+@login_requerido
 def procesar_agregar_contacto():
-    if "usuario_id" not in session:
-        return redirect(url_for("vista_login"))
-
     nombre = request.form["nombre_contacto"].strip()
     telefono = request.form["telefono"].strip()
     correo = request.form["correo_contacto"].strip()
@@ -135,10 +144,8 @@ def procesar_agregar_contacto():
 
 
 @app.route("/editar_contacto/<int:contacto_id>", methods=["GET", "POST"])
+@login_requerido
 def editar_contacto(contacto_id):
-    if "usuario_id" not in session:
-        return redirect(url_for("vista_login"))
-
     usuario_id = session["usuario_id"]
     contacto = obtener_contacto_por_id(contacto_id, usuario_id)
 
@@ -165,11 +172,9 @@ def editar_contacto(contacto_id):
     return render_template("editar.html", contacto=contacto)
 
 
-@app.route("/eliminar_contacto/<int:contacto_id>")
+@app.route("/eliminar_contacto/<int:contacto_id>", methods=["POST"])
+@login_requerido
 def procesar_eliminar_contacto(contacto_id):
-    if "usuario_id" not in session:
-        return redirect(url_for("vista_login"))
-
     eliminar_contacto(contacto_id, session["usuario_id"])
     return redirect(url_for("vista_agenda"))
 

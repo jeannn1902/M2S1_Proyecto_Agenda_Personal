@@ -20,12 +20,14 @@
         {% endif %}
 
         <section class="seccion-formulario">
-            <h3>Agregar Nuevo Contacto</h3>
+            <h2>Agregar Nuevo Contacto</h2>
             <form action="{{ url_for('procesar_agregar_contacto') }}" method="POST">
-                <input 
-                    type="text" 
-                    name="nombre_contacto" 
-                    placeholder="Nombre completo" 
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <input
+                    type="text"
+                    name="nombre_contacto"
+                    placeholder="Nombre Completo"
                     required>
 
                 <input 
@@ -81,11 +83,10 @@
                         </div>
                         <div class="acciones-contacto">
                             <a href="{{ url_for('editar_contacto', contacto_id=contacto[0]) }}" class="boton-editar">Editar</a>
-                            <a href="{{ url_for('procesar_eliminar_contacto', contacto_id=contacto[0]) }}" 
-                               class="boton-eliminar" 
-                               onclick="return confirm('¿Estás seguro de que deseas eliminar a {{ contacto[1] }}?');">
-                               Eliminar
-                            </a>
+                            <form action="{{ url_for('procesar_eliminar_contacto', contacto_id=contacto[0]) }}" method="POST" style="display: inline; margin: 0;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="boton-eliminar" onclick="return confirm('¿Seguro que deseas eliminar este contacto?');">Eliminar</button>
+                            </form>
                         </div>
                     </li>
                 {% else %}

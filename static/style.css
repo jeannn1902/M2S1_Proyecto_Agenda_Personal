@@ -223,11 +223,16 @@ button:hover {
 .boton-editar:hover {
     background-color: var(--acento-primario);
     color: var(--texto-oscuro);
-}
+} 
 
 .boton-eliminar {
+    background-color: transparent;
     color: var(--peligro);
     border: 1px solid var(--peligro);
+    width: auto;
+    margin-top: 0;
+    font-family: inherit;
+    cursor: pointer;
 }
 
 .boton-eliminar:hover {
