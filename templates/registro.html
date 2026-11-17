@@ -12,7 +12,7 @@
     <div class="contenedor">
         <h2>Crear Cuenta</h2>
 
-        {% with mensajes = get_flashed_messages(with_categiries=true) %}
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
             {% if mensajes %}
                 {% for categoria, mensaje in mensajes %}
                     <div class="alerta-{{ categoria }}">{{ mensaje }}</div>
