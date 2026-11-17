@@ -1,23 +1,27 @@
 
 /* ================================================== VARIABLES ================================================== */
 :root {
-    --bg-principal: #1e1e2e;
-    --bg-tarjeta: #313244;
-    --borde-sutil: #45445a;
-    --texto-principal: #cdd6f4;
-    --texto-secundario: #a6adc8;
-    --texto-oscuro: #11111b;
-    --acento-primario: #89b4fa;
-    --acento-hover: #b4befe;
-    --peligro: #f38ba8;
-    --exito: #a6e3a1;
-    --cerrar-sesion: #b9375c;
+    --bg-principal: #0f172a;
+    --bg-superficie: #162033;
+    --bg-tarjeta: #1e293b;
+    --borde-sutil: #334155;
+    --texto-principal: #f1f5f9;
+    --texto-secundario: #94a3b8;
+    --texto-oscuro: #0f172a;
+    --acento-primario: #38bdf8;
+    --acento-hover: #7dd3fc;
+    --acento-suave: rgba(56, 189, 248, 0.14);
+    --peligro: #fb7185;
+    --exito: #4ade80;
+    --cerrar-sesion: #f43f5e;
+    --sombra-tarjeta: 0 14px 35px rgba(0, 0, 0, 0.4);
+    --transicion: all 0.2s ease;
 }
 
 /* ================================================== BODY ================================================== */
 body {
-    font-family: Arial, sans-serif;
-    background-color: var(--bg-principal);
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: radial-gradient(circle at top, #1e293b 0%, var(--bg-principal) 70%);
     color: var(--texto-principal);
     display: flex;
     justify-content: center;
@@ -54,19 +58,24 @@ input:focus {
 /* Botón principal */
 button {
     width: 100%;
-    padding: 10px;
+    padding: 11px;
     margin-top: 15px;
     background-color: var(--acento-primario);
     color: var(--texto-oscuro);
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: var(--transicion);
 }
 
 button:hover {
     background-color: var(--acento-hover);
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(1px) scale(0.98);
 }
 
 /* Enlace de registro */
@@ -264,49 +273,72 @@ label {
 }
 
 /* ================================================ INICIO (Landing Page) ================================================ */
-.contenedor-inicio {
-    max-width: 650px;
-    margin: 80px auto;
-    padding: 40px;
-    background-color: var(--bg-principal);
-    border-radius: 12px;
-    border: 1px solid var(--borde-sutil);
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+.icono {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    vertical-align: middle;
 }
 
-.encabezado-inicio h2 {
+.contenedor-inicio {
+    max-width: 720px;
+    width: 100%;
+    margin: 24px auto;
+    padding: 44px 38px;
+    background-color: var(--bg-tarjeta);
+    border-radius: 14px;
+    border: 1px solid var(--borde-sutil);
+    text-align: center;
+    box-shadow: var(--sombra-tarjeta);
+}
+
+.insignia-inicio {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background-color: var(--acento-suave);
     color: var(--acento-primario);
-    margin-bottom: 25px;
-    font-size: 24px;
+    border: 1px solid rgba(137, 180, 250, 0.28);
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
 .contenido-inicio h1 {
     color: var(--texto-principal);
-    font-size: 26px;
-    margin-bottom: 15px;
+    font-size: 30px;
+    line-height: 1.25;
+    margin: 0 0 14px 0;
 }
 
 .contenido-inicio p {
     color: var(--texto-secundario);
     font-size: 15px;
-    line-height: 1.5;
-    margin-bottom: 30px;
+    line-height: 1.6;
+    max-width: 540px;
+    margin: 0 auto 28px auto;
 }
 
 .botones-inicio {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 14px;
+    margin-bottom: 0;
 }
 
 .boton-inicio {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     padding: 12px 24px;
-    border-radius: 6px;
+    border-radius: 8px;
     text-decoration: none;
     font-weight: bold;
     font-size: 15px;
-    transition: all 0.2s ease;
+    transition: var(--transicion);
 }
 
 .boton-inicio.primario {
@@ -316,14 +348,27 @@ label {
 
 .boton-inicio.primario:hover {
     background-color: var(--acento-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(56, 189, 248, 0.25);
+}
+
+.boton-inicio.primario:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: none;
 }
 
 .boton-inicio.secundario {
-    background-color: transparent;
+    background-color: var(--bg-superficie);
     color: var(--texto-principal);
     border: 1px solid var(--borde-sutil);
 }
 
 .boton-inicio.secundario:hover {
-    background-color: var(--bg-tarjeta);
+    border-color: var(--acento-primario);
+    color: var(--acento-primario);
+    transform: translateY(-2px);
+}
+
+.boton-inicio.secundario:active {
+    transform: translateY(0) scale(0.98);
 }
