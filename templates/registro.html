@@ -11,6 +11,15 @@
 <body>
     <div class="contenedor">
         <h2>Crear Cuenta</h2>
+
+        {% with mensajes = get_flashed_messages(with_categiries=true) %}
+            {% if mensajes %}
+                {% for categoria, mensaje in mensajes %}
+                    <div class="alerta-{{ categoria }}">{{ mensaje }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <form action="{{ url_for('procesar_registro') }}" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 

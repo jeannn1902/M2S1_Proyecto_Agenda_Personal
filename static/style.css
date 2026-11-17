@@ -10,6 +10,7 @@
     --acento-primario: #89b4fa;
     --acento-hover: #b4befe;
     --peligro: #f38ba8;
+    --exito: #a6e3a1;
     --cerrar-sesion: #b9375c;
 }
 
@@ -123,15 +124,23 @@ button:hover {
     margin-top: 0;
 }
 
-/* Alertas de error */
-.alerta-error {
-    background-color: var(--peligro);
+/* Alertas de sistema */
+.alerta-error,
+.alerta-exito {
     color: var(--texto-oscuro);
     padding: 10px 15px;
     border-radius: 6px;
     margin-bottom: 15px;
     font-weight: bold;
     font-size: 14px;
+}
+
+.alerta-error {
+    background-color: var(--peligro);
+}
+
+.alerta-exito {
+    background-color: var(--exito);
 }
 
 /* Formulario de búsqueda */

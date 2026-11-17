@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error del servidor - Agenda Personal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="contenedor" style="text-align: center;">
+        <h2 style="font-size: 48px; margin-bottom: 10px; color: var(--peligro);">500</h2>
+        <h3 style="margin-top: 0;">Error interno del servidor</h3>
+        <p style="color: var(--texto-secundario); font-size: 14px; margin-bottom: 25px;">
+            Ocurrió un problema inesperado al procesar tu solicitud. Por favor, inténtalo de nuevo más tarde.
+        </p>
+        <a href="{{ url_for('vista_inicio') }}" class="boton-inicio primario" style="display: inline-block;">
+            Volver al Inicio
+        </a>
+    </div>
+</body>
+
+</html>

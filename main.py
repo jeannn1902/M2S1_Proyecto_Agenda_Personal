@@ -1,9 +1,10 @@
+import logging
 import os
 import secrets
 from datetime import timedelta
 from functools import wraps
 
-from flask import Flask, redirect, render_template, request, session, url_for
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_wtf.csrf import CSRFProtect
 
 from base_datos.conexion_db import crear_tablas
@@ -16,8 +17,10 @@ from base_datos.consultas import (
     obtener_contacto_por_id,
     obtener_contactos,
     registrar_usuario,
+    validar_datos_contacto,
 )
 
+logger = logging.getLogger(__name__)
 
 def cargar_variables_entorno(ruta=".env"):
     """Lee el archivo .env local si existe y carga sus claves en os.environ."""
@@ -86,9 +89,11 @@ def procesar_registro():
     exito, mensaje = registrar_usuario(nombre, correo, password)
 
     if exito:
+        flash(mensaje, "exito")
         return redirect(url_for("vista_login"))
-    else:
-        return f"Error: {mensaje}", 400
+
+    flash(mensaje, "error")
+    return redirect(url_for("vista_registro"))
 
 
 @app.route("/login", methods=["POST"])
@@ -104,15 +109,15 @@ def procesar_login():
         session["usuario_id"] = usuario[0]
         session["usuario_nombre"] = usuario[1]
         return redirect(url_for("vista_agenda"))
-    else:
-        return "Correo o contraseña incorrectos.", 401
+
+    flash("Correo o contraseña incorrectos.", "error")
+    return redirect(url_for("vista_login"))
 
 
 @app.route("/agenda")
 @login_requerido
 def vista_agenda():
     busqueda = request.args.get("q", "").strip()
-    mensaje_error = request.args.get("error", "")
     contactos = obtener_contactos(session["usuario_id"], busqueda)
 
     return render_template(
@@ -120,7 +125,6 @@ def vista_agenda():
         nombre=session["usuario_nombre"],
         contactos=contactos,
         busqueda=busqueda,
-        error=mensaje_error,
     )
 
 
@@ -133,13 +137,13 @@ def procesar_agregar_contacto():
     relacion = request.form["relacion"].strip()
     usuario_id = session["usuario_id"]
 
-    # Validación de número telefónico duplicado
-    if existe_telefono(usuario_id, telefono):
-        return redirect(
-            url_for("vista_agenda", error="El número de teléfono ya está en tu agenda.")
-        )
+    es_valido, error = validar_datos_contacto(nombre, telefono, correo)
+    if not es_valido:
+        flash(error, "error")
+        return redirect(url_for("vista_agenda"))
 
     agregar_contacto(usuario_id, nombre, telefono, correo, relacion)
+    flash("Contacto agregado correctamente.", "exito")
     return redirect(url_for("vista_agenda"))
 
 
@@ -150,6 +154,7 @@ def editar_contacto(contacto_id):
     contacto = obtener_contacto_por_id(contacto_id, usuario_id)
 
     if not contacto:
+        flash("El contacto solicitado no existe.", "error")
         return redirect(url_for("vista_agenda"))
 
     if request.method == "POST":
@@ -158,15 +163,17 @@ def editar_contacto(contacto_id):
         correo = request.form["correo_contacto"].strip()
         relacion = request.form["relacion"].strip()
 
-        # Validar teléfono duplicado excluyendo el registro actual
+        es_valido, error = validar_datos_contacto(nombre, telefono, correo)
+        if not es_valido:
+            flash(error, "error")
+            return render_template("editar.html", contacto=contacto)
+
         if existe_telefono(usuario_id, telefono, contacto_id_excluir=contacto_id):
-            return render_template(
-                "editar.html",
-                contacto=contacto,
-                error="Este número de teléfono ya pertenece a otro contacto.",
-            )
+            flash("Este número de teléfono ya pertenece a otro contacto.", "error")
+            return render_template("editar.html", contacto=contacto)
 
         actualizar_contacto(contacto_id, usuario_id, nombre, telefono, correo, relacion)
+        flash("Contacto actualizado correctamente.", "exito")
         return redirect(url_for("vista_agenda"))
 
     return render_template("editar.html", contacto=contacto)
@@ -176,7 +183,19 @@ def editar_contacto(contacto_id):
 @login_requerido
 def procesar_eliminar_contacto(contacto_id):
     eliminar_contacto(contacto_id, session["usuario_id"])
+    flash("Contacto eliminado de tu agenda.", "exito")
     return redirect(url_for("vista_agenda"))
+
+
+@app.errorhandler(404)
+def pagina_no_encontrada(_error):
+    return render_template("404.html"), 404
+
+
+@app.errorhandler(500)
+def error_interno_servidor(_error):
+    logger.exception("Error interno no controlado en el servidor")
+    return render_template("500.html"), 500
 
 
 @app.after_request

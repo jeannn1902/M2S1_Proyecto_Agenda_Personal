@@ -15,9 +15,13 @@
             <a href="{{ url_for('logout') }}" class="boton-cerrar">Cerrar Sesión</a>
         </header>
 
-        {% if error %}
-            <div class="alerta-error">⚠️ {{ error }}</div>
-        {% endif %}
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% if mensajes %}
+                {% for categoria, mensaje in mensajes %}
+                    <div class="alerta-{{ categoria }}">{{ mensaje }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
         <section class="seccion-formulario">
             <h2>Agregar Nuevo Contacto</h2>

@@ -1,6 +1,37 @@
+import logging
+import re
+import sqlite3
+
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from base_datos.conexion_db import conectar
+
+logger = logging.getLogger(__name__)
+
+PATRON_CORREO = re.compile(r"^[\w\.-]+@[\w\.-]+\.\w{2,}$")
+PATRON_TELEFONO = re.compile(r"^\+?[\d\s\-()]{7,20}$")
+
+
+def validar_datos_usuario(nombre, correo, password):
+    """Valida los campos del registro de usuario. Devuelve (es_valido, mensaje_error)."""
+    if not nombre or len(nombre.strip()) < 2:
+        return False, "El nombre debe tener al menos 2 caracteres."
+    if not correo or not PATRON_CORREO.match(correo.strip()):
+        return False, "Ingresa un correo electrónico válido."
+    if not password or len(password) < 6:
+        return False, "La contraseña debe tener al menos 6 caracteres."
+    return True, ""
+
+
+def validar_datos_contacto(nombre, telefono, correo=""):
+    """Valida los campos al crear o editar un contacto. Devuelve (es_valido, mensaje_error)."""
+    if not nombre or len(nombre.strip()) < 2:
+        return False, "El nombre del contacto es obligatorio (mínimo 2 caracteres)."
+    if not telefono or not PATRON_TELEFONO.match(telefono.strip()):
+        return False, "Ingresa un número de teléfono válido (7 a 20 dígitos)."
+    if correo and not PATRON_CORREO.match(correo.strip()):
+        return False, "El correo electrónico del contacto no tiene un formato válido."
+    return True, ""
 
 
 # ==========================================
@@ -8,18 +39,28 @@ from base_datos.conexion_db import conectar
 # ==========================================
 def registrar_usuario(nombre, correo, password):
     """Registra un nuevo usuario en la base de datos con contraseña hasheada."""
+    nombre_limpio = nombre.strip()
+    correo_limpio = correo.strip().lower()
+
+    es_valido, error = validar_datos_usuario(nombre_limpio, correo_limpio, password)
+    if not es_valido:
+        return False, error
+
     conexion = conectar()
     cursor = conexion.cursor()
     password_hash = generate_password_hash(password)
     try:
         cursor.execute(
             "INSERT INTO usuarios (nombre, correo, password) VALUES (?, ?, ?)",
-            (nombre, correo, password_hash)
+            (nombre_limpio, correo_limpio, password_hash)
         )
         conexion.commit()
         return True, "Usuario registrado con éxito."
-    except Exception as e:  # noqa: BLE001
-        return False, f"Error al registrar: {e}"
+    except sqlite3.IntegrityError:
+        return False, "Este correo electrónico ya está registrado."
+    except Exception:
+        logger.exception("Error inesperado al registrar usuario")
+        return False, "Ocurrió un error interno al crear la cuenta. Inténtalo más tarde."
     finally:
         conexion.close()
 
