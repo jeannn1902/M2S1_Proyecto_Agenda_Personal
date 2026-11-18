@@ -4,7 +4,7 @@ import sqlite3
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from base_datos.conexion_db import conectar
+from base_datos.conexion_db import conectar, conexion_segura
 
 logger = logging.getLogger(__name__)
 
@@ -14,23 +14,48 @@ PATRON_TELEFONO = re.compile(r"^\+?[\d\s\-()]{7,20}$")
 
 def validar_datos_usuario(nombre, correo, password):
     """Valida los campos del registro de usuario. Devuelve (es_valido, mensaje_error)."""
-    if not nombre or len(nombre.strip()) < 2:
-        return False, "El nombre debe tener al menos 2 caracteres."
-    if not correo or not PATRON_CORREO.match(correo.strip()):
-        return False, "Ingresa un correo electrónico válido."
-    if not password or len(password) < 6:
-        return False, "La contraseña debe tener al menos 6 caracteres."
+
+    nombre = nombre.strip() if nombre else ""
+    correo = correo.strip() if correo else ""
+
+    if not 2 <= len(nombre) <= 50:
+        return False, "El nombre debe tener entre 2 y 50 caracteres."
+    
+    if not correo or len(correo) > 120 or not PATRON_CORREO.match(correo):
+        return False, "Ingresa un correo válido de máximo 120 caracteres."
+    
+    if not password or len(password) < 8:
+        return False, "La contraseña debe tener al menos 8 caracteres."
+    
     return True, ""
 
 
 def validar_datos_contacto(nombre, telefono, correo=""):
     """Valida los campos al crear o editar un contacto. Devuelve (es_valido, mensaje_error)."""
-    if not nombre or len(nombre.strip()) < 2:
-        return False, "El nombre del contacto es obligatorio (mínimo 2 caracteres)."
-    if not telefono or not PATRON_TELEFONO.match(telefono.strip()):
-        return False, "Ingresa un número de teléfono válido (7 a 20 dígitos)."
-    if correo and not PATRON_CORREO.match(correo.strip()):
-        return False, "El correo electrónico del contacto no tiene un formato válido."
+
+    nombre = nombre.strip() if nombre else ""
+    telefono = telefono.strip() if telefono else ""
+    correo = correo.strip() if correo else ""
+
+    if not 2 <= len(nombre) <= 80:
+        return False, "El nombre debe tener entre 2 y 80 caracteres."
+
+    digitos = sum(caracter.isdigit() for caracter in telefono)
+    
+    if not 7 <= digitos <= 15:
+        return False, "El teléfono debe contener entre 7 y 15 dígitos."
+
+    if not all(
+        caracter.isdigit() or caracter in "+()- ."
+        for caracter in telefono
+    ):
+        return False, "El teléfono contiene caracteres no permitidos."
+    
+    if correo and (
+        len(correo) > 120 or not PATRON_CORREO.match(correo)
+    ):
+        return False, "El correo del contacto no es válido o supera los 120 caracteres."
+    
     return True, ""
 
 
@@ -66,57 +91,52 @@ def registrar_usuario(nombre, correo, password):
 
 
 def iniciar_sesion(correo, password):
-    """Verifica credenciales mediante hash y migra cuentas antiguas si es necesario."""
+    """Verifica las credenciales utilizando exclusivamente contraseñas hasheadas."""
+    correo_limpio = correo.strip().lower()
+
     conexion = conectar()
-    cursor = conexion.cursor()
-    cursor.execute(
-        "SELECT id, nombre, correo, password FROM usuarios WHERE correo = ?",
-        (correo,)
-    )
-    usuario = cursor.fetchone()
 
-    if not usuario:
-        conexion.close()
-        return None
+    try:
+        cursor = conexion.cursor()
 
-    password_almacenado = usuario[3]
+        cursor.execute(
+            "SELECT id, nombre, correo, password FROM usuarios WHERE correo = ?",
+            (correo_limpio,)
+        )
 
-    # Caso 1: La contraseña ya tiene formato de hash
-    if password_almacenado.startswith(("scrypt:", "pbkdf2:")):
-        valido = check_password_hash(password_almacenado, password)
-    else:
-        # Caso 2: Cuenta antigua en texto plano -> validar y migrar a hash
-        valido = (password_almacenado == password)
-        if valido:
-            nuevo_hash = generate_password_hash(password)
-            cursor.execute(
-                "UPDATE usuarios SET password = ? WHERE id = ?",
-                (nuevo_hash, usuario[0])
-            )
-            conexion.commit()
+        usuario = cursor.fetchone()
 
-    conexion.close()
+        if not usuario:
+            return None
 
-    if valido:
+        password_almacenado = usuario[3]
+
+        if not check_password_hash(password_almacenado, password):
+            return None
+
         return (usuario[0], usuario[1], usuario[2])
-    return None
+
+    finally:
+        conexion.close()
 
 # ==========================================
 # FUNCIONES DE CONTACTOS
 # ==========================================
 def agregar_contacto(usuario_id, nombre, telefono="", correo="", categoria="General"):
     """Agrega un nuevo contacto ligado al id del usuario autenticado."""
-    conexion = conectar()
-    cursor = conexion.cursor()
-    cursor.execute(
-        """
-        INSERT INTO contactos (usuario_id, nombre, telefono, correo, categoria)
-        VALUES (?, ?, ?, ?, ?)
-        """,
-        (usuario_id, nombre, telefono, correo, categoria)
-    )
-    conexion.commit()
-    conexion.close()
+
+    with conexion_segura() as conexion:
+        cursor = conexion.cursor()
+
+        cursor.execute(
+            """
+            INSERT INTO contactos (usuario_id, nombre, telefono, correo, categoria)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (usuario_id, nombre, telefono, correo, categoria)
+        )
+
+        conexion.commit()
 
 
 def existe_telefono(usuario_id, telefono, contacto_id_excluir=None):

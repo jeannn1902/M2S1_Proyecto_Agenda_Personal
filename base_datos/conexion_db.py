@@ -1,11 +1,34 @@
 import sqlite3
+from contextlib import contextmanager
+from pathlib import Path
 
+RUTA_BD = Path(__file__).resolve().parent.parent / "agenda.db"
 
 def conectar():
     """Abre y devuelve la conexión con la base de datos."""
-    conexion = sqlite3.connect("agenda.db")
-    conexion.execute("PRAGMA foreign_keys = ON")
+    conexion = sqlite3.connect(str(RUTA_BD), timeout=10)
+
+    try:
+        conexion.execute("PRAGMA foreign_keys = ON")
+    except sqlite3.Error:
+        conexion.close()
+        raise
+
     return conexion
+
+@contextmanager
+def conexion_segura():
+    """Administra la conexión y garantiza su cierre."""
+    conexion = conectar()
+
+    try:
+        yield conexion
+    except Exception:
+        conexion.rollback()
+        raise
+    finally:
+        conexion.close()
+
 
 def crear_tablas():
     """Crea las tablas de usuarios y contactos si no existen."""

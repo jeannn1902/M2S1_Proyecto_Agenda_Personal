@@ -117,10 +117,29 @@ button:active {
 }
 
 .boton-cerrar {
+    width: auto;
+    padding: 0;
+    margin: 0;
+    background: transparent;
     color: var(--cerrar-sesion);
+    border: none;
+    border-radius: 0;
     text-decoration: none;
     font-size: 14px;
     font-weight: bold;
+    cursor: pointer;
+    transition: var(--transicion);
+}
+
+.boton-cerrar:hover {
+    background: transparent;
+    color: var(--peligro);
+    transform: none;
+}
+
+.boton-cerrar:active {
+    background: transparent;
+    transform: none;
 }
 
 .seccion-formulario {

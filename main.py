@@ -1,6 +1,5 @@
 import logging
 import os
-import secrets
 from datetime import timedelta
 from functools import wraps
 
@@ -39,8 +38,13 @@ cargar_variables_entorno()
 
 app = Flask(__name__)
 
-# Clave secreta leída desde entorno
-app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY") or secrets.token_hex(32)
+# Clave secreta obligatoria desde variables de entorno
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
+if not SECRET_KEY:
+    raise RuntimeError("No se ha configurado la variable SECRET_KEY.")
+
+app.config["SECRET_KEY"] = SECRET_KEY
 
 # Configuración segura de cookies de sesión
 modo_debug = os.environ.get("FLASK_DEBUG", "False").lower() == "true"
@@ -83,14 +87,22 @@ def vista_registro():
 @app.route("/registro", methods=["POST"])
 def procesar_registro():
     nombre = request.form["nombre"]
-    correo = request.form["correo"]
+    correo = request.form["correo"].strip().lower()
     password = request.form["password"]
 
     exito, mensaje = registrar_usuario(nombre, correo, password)
 
     if exito:
-        flash(mensaje, "exito")
-        return redirect(url_for("vista_login"))
+        usuario = iniciar_sesion(correo, password)
+
+        if usuario:
+            session.clear()
+            session.permanent = True
+            session["usuario_id"] = usuario[0]
+            session["usuario_nombre"] = usuario[1]
+
+            flash("¡Bienvenido! Tu cuenta fue creada correctamente.", "exito")
+            return redirect(url_for("vista_agenda"))
 
     flash(mensaje, "error")
     return redirect(url_for("vista_registro"))
@@ -140,6 +152,10 @@ def procesar_agregar_contacto():
     es_valido, error = validar_datos_contacto(nombre, telefono, correo)
     if not es_valido:
         flash(error, "error")
+        return redirect(url_for("vista_agenda"))
+
+    if existe_telefono(usuario_id, telefono):
+        flash("Este número de teléfono ya pertenece a otro contacto.", "error")
         return redirect(url_for("vista_agenda"))
 
     agregar_contacto(usuario_id, nombre, telefono, correo, relacion)
@@ -208,9 +224,11 @@ def evitar_cache_rutas_privadas(response):
     return response
 
 
-@app.route("/logout")
+@app.route("/logout", methods=["POST"])
+@login_requerido
 def logout():
     session.clear()
+    flash("Has cerrado sesión correctamente.", "exito")
     return redirect(url_for("vista_login"))
 
 
