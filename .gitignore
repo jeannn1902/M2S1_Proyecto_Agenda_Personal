@@ -1,5 +1,6 @@
 # Variables de entorno locales
 .env
+.env.*
 
 # Caché y compilados de Python
 __pycache__/
@@ -15,13 +16,12 @@ env/
 *.db
 *.sqlite3
 
-# Markdowns
+# Archivos Markdown auxiliares
 as.txt
 explanation_structure.md
 product_backlog.md
 
-# Carpetas
-mds_txt/x
+# Carpetas auxiliares
+mds_txt/
 
 # Configuraciones locales
-*.json

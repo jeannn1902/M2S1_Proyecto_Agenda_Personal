@@ -64,30 +64,35 @@ def validar_datos_contacto(nombre, telefono, correo=""):
 # ==========================================
 def registrar_usuario(nombre, correo, password):
     """Registra un nuevo usuario en la base de datos con contraseña hasheada."""
+
     nombre_limpio = nombre.strip()
     correo_limpio = correo.strip().lower()
 
     es_valido, error = validar_datos_usuario(nombre_limpio, correo_limpio, password)
+
     if not es_valido:
         return False, error
 
-    conexion = conectar()
-    cursor = conexion.cursor()
     password_hash = generate_password_hash(password)
+
     try:
-        cursor.execute(
-            "INSERT INTO usuarios (nombre, correo, password) VALUES (?, ?, ?)",
-            (nombre_limpio, correo_limpio, password_hash)
-        )
-        conexion.commit()
-        return True, "Usuario registrado con éxito."
+        with conexion_segura() as conexion:
+            cursor = conexion.cursor()
+
+            cursor.execute(
+                "INSERT INTO usuarios (nombre, correo, password) VALUES (?, ?, ?)",
+                (nombre_limpio, correo_limpio, password_hash)
+            )
+
+            conexion.commit()
+            return True, "Usuario registrado con éxito."
+        
     except sqlite3.IntegrityError:
         return False, "Este correo electrónico ya está registrado."
+    
     except Exception:
         logger.exception("Error inesperado al registrar usuario")
         return False, "Ocurrió un error interno al crear la cuenta. Inténtalo más tarde."
-    finally:
-        conexion.close()
 
 
 def iniciar_sesion(correo, password):
@@ -141,90 +146,107 @@ def agregar_contacto(usuario_id, nombre, telefono="", correo="", categoria="Gene
 
 def existe_telefono(usuario_id, telefono, contacto_id_excluir=None):
     """Verifica si un número de teléfono ya está registrado por el mismo usuario."""
-    conexion = conectar()
-    cursor = conexion.cursor()
-    if contacto_id_excluir:
-        cursor.execute(
-            "SELECT id FROM contactos WHERE usuario_id = ? AND telefono = ? AND id != ?",
-            (usuario_id, telefono, contacto_id_excluir),
-        )
-    else:
-        cursor.execute(
-            "SELECT id FROM contactos WHERE usuario_id = ? AND telefono = ?",
-            (usuario_id, telefono),
-        )
-    existe = cursor.fetchone() is not None
-    conexion.close()
+
+    with conexion_segura() as conexion:
+        cursor = conexion.cursor()
+
+        if contacto_id_excluir:
+            cursor.execute(
+                "SELECT id FROM contactos WHERE usuario_id = ? AND telefono = ? AND id != ?",
+                (usuario_id, telefono, contacto_id_excluir),
+            )
+        else:
+            cursor.execute(
+                "SELECT id FROM contactos WHERE usuario_id = ? AND telefono = ?",
+                (usuario_id, telefono),
+            )
+
+        existe = cursor.fetchone() is not None
+
     return existe
 
 
 def obtener_contactos(usuario_id, busqueda=""):
     """Obtiene contactos con opción de filtro por búsqueda."""
-    conexion = conectar()
-    cursor = conexion.cursor()
-    if busqueda:
-        patron = f"%{busqueda}%"
-        cursor.execute(
-            """
-            SELECT id, nombre, telefono, correo, categoria 
-            FROM contactos 
-            WHERE usuario_id = ? AND (nombre LIKE ? OR categoria LIKE ? OR telefono LIKE ?)
-            ORDER BY nombre ASC
-            """,
-            (usuario_id, patron, patron, patron),
-        )
-    else:
-        cursor.execute(
-            """
-            SELECT id, nombre, telefono, correo, categoria 
-            FROM contactos 
-            WHERE usuario_id = ? 
-            ORDER BY nombre ASC
-            """,
-            (usuario_id,),
-        )
-    contactos = cursor.fetchall()
-    conexion.close()
+
+    with conexion_segura() as conexion:
+        cursor = conexion.cursor()
+
+        if busqueda:
+            patron = f"%{busqueda}%"
+
+            cursor.execute(
+                """
+                SELECT id, nombre, telefono, correo, categoria 
+                FROM contactos 
+                WHERE usuario_id = ? AND (nombre LIKE ? OR categoria LIKE ? OR telefono LIKE ?)
+                ORDER BY nombre ASC
+                """,
+                (usuario_id, patron, patron, patron),
+            )
+        else:
+            cursor.execute(
+                """
+                SELECT id, nombre, telefono, correo, categoria 
+                FROM contactos 
+                WHERE usuario_id = ? 
+                ORDER BY nombre ASC
+                """,
+                (usuario_id,),
+            )
+
+        contactos = cursor.fetchall()
+
     return contactos
 
 
 def obtener_contacto_por_id(contacto_id, usuario_id):
     """Obtiene un único contacto verificando la propiedad del usuario."""
-    conexion = conectar()
-    cursor = conexion.cursor()
-    cursor.execute(
-        "SELECT id, nombre, telefono, correo, categoria FROM contactos WHERE id = ? AND usuario_id = ?",
-        (contacto_id, usuario_id),
-    )
-    contacto = cursor.fetchone()
-    conexion.close()
+
+    with conexion_segura() as conexion:
+        cursor = conexion.cursor()
+
+        cursor.execute(
+            """
+            SELECT id, nombre, telefono, correo, categoria
+            FROM contactos
+            WHERE id = ? AND usuario_id = ?
+            """,
+            (contacto_id, usuario_id),
+        )
+
+        contacto = cursor.fetchone()
+
     return contacto
 
 
 def actualizar_contacto(contacto_id, usuario_id, nombre, telefono, correo, categoria):
     """Actualiza la información de un contacto existente."""
-    conexion = conectar()
-    cursor = conexion.cursor()
-    cursor.execute(
-        """
-        UPDATE contactos 
-        SET nombre = ?, telefono = ?, correo = ?, categoria = ? 
-        WHERE id = ? AND usuario_id = ?
-        """,
-        (nombre, telefono, correo, categoria, contacto_id, usuario_id),
-    )
-    conexion.commit()
-    conexion.close()
+
+    with conexion_segura() as conexion:
+        cursor = conexion.cursor()
+
+        cursor.execute(
+            """
+            UPDATE contactos 
+            SET nombre = ?, telefono = ?, correo = ?, categoria = ? 
+            WHERE id = ? AND usuario_id = ?
+            """,
+            (nombre, telefono, correo, categoria, contacto_id, usuario_id),
+        )
+
+        conexion.commit()
 
 
 def eliminar_contacto(contacto_id, usuario_id):
-
     """Elimina un contacto asegurando que pertenezca al usuario activo."""
-    conexion = conectar()
-    cursor = conexion.cursor()
-    cursor.execute(
-        "DELETE FROM contactos WHERE id = ? AND usuario_id = ?",
-        (contacto_id, usuario_id)
-    )
-    conexion.commit()
-    conexion.close()
+
+    with conexion_segura() as conexion:
+        cursor = conexion.cursor()
+
+        cursor.execute(
+            "DELETE FROM contactos WHERE id = ? AND usuario_id = ?",
+            (contacto_id, usuario_id)
+        )
+
+        conexion.commit()
