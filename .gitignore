@@ -13,7 +13,6 @@ env/
 
 # Base de datos local
 *.db
-*agenda.db
 *.sqlite3
 
 # Markdowns
