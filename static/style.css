@@ -355,39 +355,40 @@ body.pagina-inicio {
 
 .contenedor-landing {
     width: 100%;
-    max-width: 1050px;
-    margin: 0 auto;
-    padding: 40px 24px;
+    max-width: 1080px;
+    margin: auto;
+    padding: 16px 28px;
     box-sizing: border-box;
 }
 
 .seccion-hero {
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 36px;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px;
     align-items: center;
-    margin-bottom: 60px;
+    margin-bottom: 16px;
 }
 
 .insignia-inicio {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 14px;
+    padding: 5px 12px;
     border-radius: 999px;
     background-color: var(--acento-suave);
     color: var(--acento-primario);
     border: 1px solid rgba(56, 189, 248, 0.3);
-    font-size: 13px;
+    font-size: 12.5px;
     font-weight: bold;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
 .hero-texto h1 {
     color: var(--texto-principal);
-    font-size: 36px;
-    line-height: 1.2;
-    margin: 0 0 16px 0;
+    font-size: 32px;
+    line-height: 1.18;
+    margin: 0 0 12px 0;
+    max-width: 540px;
 }
 
 .texto-destacado {
@@ -396,25 +397,27 @@ body.pagina-inicio {
 
 .hero-texto p {
     color: var(--texto-secundario);
-    font-size: 15.5px;
-    line-height: 1.6;
-    margin: 0 0 28px 0;
+    font-size: 15px;
+    line-height: 1.55;
+    max-width: 520px;
+    margin: 0 0 20px 0;
 }
 
 .botones-inicio {
     display: flex;
-    gap: 14px;
+    gap: 12px;
+    flex-wrap: wrap;
 }
 
 .boton-inicio {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 24px;
+    padding: 12px 22px;
     border-radius: 8px;
     text-decoration: none;
     font-weight: bold;
-    font-size: 15px;
+    font-size: 14px;
     transition: var(--transicion);
 }
 
@@ -488,11 +491,11 @@ body.pagina-inicio {
 .contacto-ejemplo {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
     background-color: var(--bg-principal);
     border: 1px solid var(--borde-sutil);
     border-radius: 8px;
-    padding: 12px 14px;
+    padding: 11px 12px;
     margin-bottom: 10px;
 }
 
@@ -501,14 +504,14 @@ body.pagina-inicio {
 }
 
 .avatar-ejemplo {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background-color: var(--acento-suave);
     color: var(--acento-primario);
     border: 1px solid rgba(56, 189, 248, 0.3);
     font-weight: bold;
-    font-size: 14px;
+    font-size: 13px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -517,8 +520,8 @@ body.pagina-inicio {
 
 .contacto-ejemplo strong {
     display: block;
-    font-size: 14.5px;
-    margin-bottom: 4px;
+    font-size: 14px;
+    margin-bottom: 5px;
 }
 
 .tag-ejemplo {
@@ -532,7 +535,7 @@ body.pagina-inicio {
 }
 
 .contacto-ejemplo p {
-    margin: 2px 0;
+    margin: 3px 0;
     font-size: 12.5px;
     color: var(--texto-secundario);
 }
@@ -540,61 +543,109 @@ body.pagina-inicio {
 /* Sección de beneficios */
 .seccion-beneficios {
     border-top: 1px solid var(--borde-sutil);
-    padding-top: 42px;
+    padding-top: 14px;
 }
 
 .seccion-beneficios h2 {
     text-align: center;
-    font-size: 23px;
-    margin: 0 0 26px 0;
+    font-size: 18px;
+    margin: 0 0 12px 0;
 }
 
 .grid-beneficios {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+    gap: 14px;
 }
 
 .tarjeta-beneficio {
     background-color: var(--bg-tarjeta);
     border: 1px solid var(--borde-sutil);
     border-radius: 10px;
-    padding: 22px;
+    padding: 14px 16px;
     transition: var(--transicion);
 }
 
 .tarjeta-beneficio:hover {
     border-color: var(--acento-primario);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
+}
+
+.encabezado-beneficio {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
 }
 
 .icono-beneficio {
-    font-size: 24px;
-    margin-bottom: 10px;
+    font-size: 18px;
+    line-height: 1;
 }
 
 .tarjeta-beneficio h3 {
-    margin: 0 0 8px 0;
-    font-size: 16px;
+    margin: 0;
+    font-size: 14.5px;
     color: var(--texto-principal);
 }
 
 .tarjeta-beneficio p {
     margin: 0;
-    font-size: 13.5px;
+    font-size: 13px;
     color: var(--texto-secundario);
-    line-height: 1.5;
+    line-height: 1.45;
 }
 
 /* Pie de página */
 .pie-inicio {
     text-align: center;
-    padding: 18px;
+    padding: 8px 16px;
     border-top: 1px solid var(--borde-sutil);
     color: var(--texto-secundario);
-    font-size: 13px;
+    font-size: 12.5px;
 }
 
 .pie-inicio p {
     margin: 0;
+}
+
+/* ================================================ RESPONSIVE (Landing Page) ================================================ */
+@media (max-width: 768px) {
+
+    .contenedor-landing {
+        padding: 28px 20px;
+    }
+
+    .seccion-hero {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        margin-bottom: 28px;
+    }
+
+    .hero-texto h1 {
+        font-size: 28px;
+    }
+
+    .ventana-muestra {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .grid-beneficios {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+}
+
+@media (min-width: 769px) {
+    body.pagina-inicio {
+        height: 100vh;
+        min-height: 100vh;
+        overflow: hidden;
+    }
+
+    .barra-navegacion {
+        padding: 12px 28px;
+    }
 }
