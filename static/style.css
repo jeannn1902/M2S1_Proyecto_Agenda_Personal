@@ -18,6 +18,10 @@
     --transicion: all 0.2s ease;
 }
 
+/* =========================================================================== */
+/* Seccion de inicio.html */
+/* =========================================================================== */
+
 /* ================================================== BODY ================================================== */
 body {
     font-family: "Segoe UI", Arial, sans-serif;
@@ -291,13 +295,27 @@ label {
     margin-top: 10px;
 }
 
-/* ================================================ INICIO (Landing Page) ================================================ */
+/* =========================================================================== */
+/* VARIABLES EXCLUSIVAS - INICIO */
+/* =========================================================================== */
 body.pagina-inicio {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: stretch;
-    min-height: 100vh;
+    --bg-principal: #0B1220;
+    --bg-superficie: #111C2E;
+    --bg-tarjeta: #1A293B;
+    --borde-sutil: #2B3B50;
+
+    --texto-principal: #F1F5F9;
+    --texto-secundario: #94A3B8;
+    --texto-oscuro: #0B1220;
+
+    --acento-primario: #22C55E;
+    --acento-hover: #4ADE80;
+    --acento-suave: rgba(34, 197, 94, 0.14);
+
+    --peligro: #FB7185;
+    --exito: #4ADE80;
+
+    --sombra-tarjeta: 0 14px 35px rgba(0, 0, 0, 0.4);
 }
 
 .barra-navegacion {

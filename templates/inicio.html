@@ -1,103 +1,138 @@
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda Personal - Bienvenido</title>
+    <title>Agenda Personal</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body class="pagina-inicio">
+
     <nav class="barra-navegacion">
         <div class="marca-nav">📒 Agenda Personal</div>
-        <div class="enlaces-nav">
-            <a href="{{ url_for('vista_login') }}" class="enlace-nav">Iniciar Sesión</a>
-            <a href="{{ url_for('vista_registro') }}" class="boton-nav">Registrarse</a>
-        </div>
     </nav>
 
     <main class="contenedor-landing">
 
+        <!-- Presentación principal -->
         <section class="seccion-hero">
 
             <div class="hero-texto">
-                <h1>Todos tus contactos <span class="texto-destacado">organizados y seguros</span></h1>
-                <p>Administra tus contactos, guarda su información y encuentra fácilmente a las personas importantes para ti.</p>
+
+                <span class="insignia-inicio">AGENDA DIGITAL DE CONTACTOS</span>
+
+                <h1>Tu agenda personal para organizar todos tus contactos.</h1>
+
+                <p>
+                    Registra, consulta y administra tus contactos fácilmente.
+                    Mantén sus nombres, teléfonos y correos organizados en un solo lugar.
+                </p>
 
                 <div class="botones-inicio">
-                    <a href="{{ url_for('vista_registro') }}" class="boton-inicio primario">Comenzar Gratis</a>
-                    <a href="{{ url_for('vista_login') }}" class="boton-inicio secundario">Ya tengo cuenta</a>
+                    <a href="{{ url_for('vista_registro') }}"
+                    class="boton-inicio primario">
+                        Crear mi cuenta
+                    </a>
+
+                    <a href="{{ url_for('vista_login') }}"
+                    class="boton-inicio secundario">
+                        Iniciar sesión
+                    </a>
                 </div>
+
             </div>
 
+            <!-- Vista previa de la agenda -->
             <div class="hero-muestra" aria-hidden="true">
 
                 <div class="ventana-muestra">
+
                     <div class="barra-ventana">
                         <span class="punto rojo"></span>
                         <span class="punto amarillo"></span>
                         <span class="punto verde"></span>
-                        <small>Vista previa de tu agenda</small>
+                        <small>Mis contactos</small>
                     </div>
 
                     <div class="contacto-ejemplo">
+
                         <div class="avatar-ejemplo">MG</div>
+
                         <div>
-                            <strong>María González <span class="tag-ejemplo">Familia</span></strong>
+                            <strong>María González</strong>
                             <p>📞 771 123 4567</p>
                             <p>✉️ maria.g@correo.com</p>
+                            <span class="tag-ejemplo">Familia</span>
                         </div>
+
                     </div>
 
                     <div class="contacto-ejemplo">
+
                         <div class="avatar-ejemplo">CR</div>
+
                         <div>
-                            <strong>Carlos Ruiz <span class="tag-ejemplo">Trabajo</span></strong>
+                            <strong>Carlos Ruiz</strong>
                             <p>📞 771 987 6543</p>
                             <p>✉️ carlos.dev@empresa.com</p>
+                            <span class="tag-ejemplo">Trabajo</span>
                         </div>
+
                     </div>
+
                 </div>
 
             </div>
+
         </section>
 
+        <!-- Funciones principales -->
         <section class="seccion-beneficios">
-            <h2>¿Qué puedes hacer en tu Agenda Personal?</h2>
+
+            <h2>¿Qué puedes hacer?</h2>
 
             <div class="grid-beneficios">
+
                 <article class="tarjeta-beneficio">
                     <div class="encabezado-beneficio">
-                        <span class="icono-beneficio">👥</span>
-                        <h3>Clasifica tus contactos</h3>
+                        <span class="icono-beneficio">👤</span>
+                        <h3>Registrar</h3>
                     </div>
-                    <p>Registra nombre completo, teléfono, correo y etiqueta cada contacto según su parentesco contigo.</p>
+
+                    <p>Guarda nombres, teléfonos y correos.</p>
                 </article>
 
                 <article class="tarjeta-beneficio">
                     <div class="encabezado-beneficio">
                         <span class="icono-beneficio">🔍</span>
-                        <h3>Búsqueda instantánea</h3>
+                        <h3>Buscar</h3>
                     </div>
-                    <p>Encuentra a cualquier persona en segundos filtrando por nombre, número telefónico o categoría.</p>
+
+                    <p>Encuentra contactos por nombre o teléfono.</p>
                 </article>
 
                 <article class="tarjeta-beneficio">
                     <div class="encabezado-beneficio">
-                        <span class="icono-beneficio">🔒</span>
-                        <h3>Cuenta 100% privada</h3>
+                        <span class="icono-beneficio">🏷️</span>
+                        <h3>Clasificar</h3>
                     </div>
-                    <p>Cada usuario tiene su propio espacio protegido con contraseña cifrada y sesión segura.</p>
+
+                    <p>Organiza tus contactos por categorías.</p>
                 </article>
+
             </div>
+
         </section>
+
     </main>
 
     <footer class="pie-inicio">
-        <p>Proyecto Web - Agenda Personal desarrollada con Python, Flask y SQLite</p>
+        <p>Agenda Personal · Desarrollada con Python, Flask y SQLite</p>
     </footer>
-    
+
 </body>
 
 </html>
