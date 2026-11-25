@@ -4,13 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda Personal - Login</title>
+    <title>Iniciar sesión | AgendaX</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
-<body>
-    <div class="contenedor">
-        <h2>Iniciar Sesión</h2>
+<body class="pagina-auth">
+
+    <main class="contenedor contenedor-auth">
+
+        <a href="{{ url_for('vista_inicio') }}" class="marca-auth">
+            <span class="icono-marca">A</span>
+            <span class="nombre-marca">Agenda<span class="marca-acento">X</span></span>
+        </a>
+
+        <div class="encabezado-auth">
+            <h1>Bienvenido de nuevo</h1>
+            <p>Inicia sesión para acceder a tu agenda.</p>
+        </div>
 
         {% with mensajes = get_flashed_messages(with_categories=true) %}
             {% if mensajes %}
@@ -20,24 +30,38 @@
             {% endif %}
         {% endwith %}
 
-        <form action="{{ url_for('procesar_login') }}" method="POST">
+        <form action="{{ url_for('procesar_login') }}" method="POST" class="form-auth">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-            <input 
-                type="email"
-                name="correo"
-                placeholder="Correo Electrónico"
-                required>
+            <div class="grupo-campo">
+                <label for="correo">Correo electrónico</label>
+                <input 
+                    type="email"
+                    id="correo"
+                    name="correo"
+                    placeholder="ejemplo@correo.com"
+                    required>
+            </div>
 
-            <input
-                type="password"
-                name="password"
-                placeholder="Contraseña"
-                required>
+            <div class="grupo-campo">
+                <label for="password">Contraseña</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Ingresa tu contraseña"
+                    required>
+            </div>
 
-            <button type="submit">Entrar</button>
+            <button type="submit" class="boton-auth">Iniciar sesión</button>
         </form>
-        <p class="texto-enlace">¿No tienes cuenta? <a href="{{ url_for('vista_registro') }}">Regístrate Aquí</a></p>
-    </div>
+
+        <p class="texto-enlace">
+            ¿No tienes cuenta? 
+            <a href="{{ url_for('vista_registro') }}">Crear una cuenta</a>
+        </p>
+
+    </main>
+    
 </body>
 </html>

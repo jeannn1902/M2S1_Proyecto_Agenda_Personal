@@ -333,6 +333,10 @@ body.pagina-inicio {
     --exito: #4ADE80;
 
     --sombra-tarjeta: 0 14px 35px rgba(0, 0, 0, 0.4);
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
 
 .barra-navegacion {
@@ -674,8 +678,116 @@ body.pagina-inicio {
     margin: 0;
 }
 
+/* =========================================================================== */
+/* 8. AUTENTICACIÓN - INICIO DE SESIÓN Y REGISTRO */
+/* =========================================================================== */
+
+.pagina-auth {
+    min-height: 100vh;
+    padding: 32px 16px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contenedor-auth {
+    width: 100%;
+    max-width: 430px;
+    padding: 36px;
+    box-sizing: border-box;
+    background-color: var(--bg-tarjeta);
+    border: 1px solid var(--borde-sutil);
+    border-radius: 16px;
+    box-shadow: var(--sombra-tarjeta), var(--sombra-violeta);
+}
+
+.marca-auth {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 28px;
+    text-decoration: none;
+}
+
+.encabezado-auth {
+    text-align: center;
+    margin-bottom: 26px;
+}
+
+.encabezado-auth h1 {
+    margin: 0 0 8px;
+    color: var(--texto-principal);
+    font-size: 25px;
+}
+
+.encabezado-auth p {
+    margin: 0;
+    color: var(--texto-secundario);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.form-auth {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.grupo-campo label{
+    margin: 0;
+    color: var(--texto-principal);
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.grupo-campo input {
+    margin: 0;
+    padding: 12px 13px;
+    background-color: var(--bg-principal);
+    border: 1px solid var(--borde-sutil);
+    border-radius: 8px;
+    color: var(--texto-principal);
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.grupo-campo input:focus {
+    outline: none;
+    border-color: var(--acento-hover);
+    box-shadow: 0 0 0 3px var(--acento-suave);
+}
+
+.boton-auth {
+    margin-top: 6px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.contenedor-auth .texto-enlace {
+    margin: 24px 0 0;
+    color: var(--texto-secundario);
+}
+
+.contenedor-auth .texto-enlace a {
+    color: var(--acento-hover);
+}
+
+.contenedor-auth .texto-enlace a:hover {
+    text-decoration: underline;
+}
+
+
 /* ================================================ RESPONSIVE (Landing Page) ================================================ */
 @media (max-width: 768px) {
+
+    body.pagina-inicio {
+        min-height: 100vh;
+        height: auto;
+        overflow: visible;
+    }
 
     .contenedor-landing {
         padding: 28px 20px;
@@ -708,6 +820,7 @@ body.pagina-inicio {
         height: 100vh;
         min-height: 100vh;
         overflow: hidden;
+        justify-content: space-between;
     }
 
     .barra-navegacion {
