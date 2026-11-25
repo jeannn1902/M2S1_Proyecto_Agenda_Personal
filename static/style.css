@@ -1,31 +1,43 @@
+/* =========================================================================== */
+/* 1. VARIABLES GLOBALES - IDENTIDAD VISUAL DE AGENDAX */
+/* =========================================================================== */
 
-/* ================================================== VARIABLES ================================================== */
 :root {
-    --bg-principal: #0f172a;
-    --bg-superficie: #162033;
-    --bg-tarjeta: #1e293b;
-    --borde-sutil: #334155;
-    --texto-principal: #f1f5f9;
-    --texto-secundario: #94a3b8;
-    --texto-oscuro: #0f172a;
-    --acento-primario: #38bdf8;
-    --acento-hover: #7dd3fc;
-    --acento-suave: rgba(56, 189, 248, 0.14);
-    --peligro: #fb7185;
-    --exito: #4ade80;
-    --cerrar-sesion: #f43f5e;
+    --bg-principal: #08070D;
+    --bg-superficie: #100D18;
+    --bg-tarjeta: #171222;
+    --bg-elevado: #211832;
+
+    --borde-sutil: #38264D;
+
+    --texto-principal: #F4F0FA;
+    --texto-secundario: #B8AEC7;
+    --texto-oscuro: #08070D;
+
+    --acento-primario: #8A2BE2;
+    --acento-hover: #B86CFF;
+    --acento-suave: rgba(184, 108, 255, 0.14);
+
+    --boton-principal: #238636;
+    --boton-hover: #2EA043;
+
+    --peligro: #FB7185;
+    --exito: #4ADE80;
+    --cerrar-sesion: #FB7185;
+
     --sombra-tarjeta: 0 14px 35px rgba(0, 0, 0, 0.4);
+    --sombra-violeta: 0 0 22px rgba(184, 108, 255, 0.12);
+
     --transicion: all 0.2s ease;
 }
 
 /* =========================================================================== */
-/* Seccion de inicio.html */
+/* 2. ESTILOS GENERALES */
 /* =========================================================================== */
 
-/* ================================================== BODY ================================================== */
 body {
     font-family: "Segoe UI", Arial, sans-serif;
-    background: radial-gradient(circle at top, #1e293b 0%, var(--bg-principal) 70%);
+    background: radial-gradient(circle at top, #211832 0%, var(--bg-principal) 70%);
     color: var(--texto-principal);
     display: flex;
     justify-content: center;
@@ -59,22 +71,23 @@ input:focus {
     border-color: var(--acento-primario);
 }
 
-/* Botón principal */
+/* Botones principales de formularios */
+
 button {
     width: 100%;
     padding: 11px;
     margin-top: 15px;
-    background-color: var(--acento-primario);
-    color: var(--texto-oscuro);
-    border: none;
-    border-radius: 6px;
+    background-color: var(--boton-principal);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 7px;
     font-weight: bold;
     cursor: pointer;
     transition: var(--transicion);
 }
 
 button:hover {
-    background-color: var(--acento-hover);
+    background-color: var(--boton-hover);
     transform: translateY(-1px);
 }
 
@@ -296,21 +309,25 @@ label {
 }
 
 /* =========================================================================== */
-/* VARIABLES EXCLUSIVAS - INICIO */
+/* 7. INICIO - VARIABLES EXCLUSIVAS */
 /* =========================================================================== */
+
 body.pagina-inicio {
-    --bg-principal: #0B1220;
-    --bg-superficie: #111C2E;
-    --bg-tarjeta: #1A293B;
-    --borde-sutil: #2B3B50;
+    --bg-principal: #08070D;
+    --bg-superficie: #100D18;
+    --bg-tarjeta: #171222;
+    --borde-sutil: #38264D;
 
-    --texto-principal: #F1F5F9;
-    --texto-secundario: #94A3B8;
-    --texto-oscuro: #0B1220;
+    --texto-principal: #F4F0FA;
+    --texto-secundario: #B8AEC7;
+    --texto-oscuro: #08070D;
 
-    --acento-primario: #22C55E;
-    --acento-hover: #4ADE80;
-    --acento-suave: rgba(34, 197, 94, 0.14);
+    --acento-primario: #8A2BE2;
+    --acento-hover: #B86CFF;
+    --acento-suave: rgba(184, 108, 255, 0.14);
+
+    --boton-principal: #238636;
+    --boton-hover: #2EA043;
 
     --peligro: #FB7185;
     --exito: #4ADE80;
@@ -330,10 +347,37 @@ body.pagina-inicio {
     border-bottom: 1px solid var(--borde-sutil);
 }
 
+/* Subsección: Marca AgendaX */
+
 .marca-nav {
-    font-size: 19px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
     font-weight: bold;
     color: var(--texto-principal);
+}
+
+.icono-marca {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--acento-suave);
+    color: var(--acento-hover);
+    border: 1px solid var(--borde-sutil);
+    border-radius: 10px;
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.nombre-marca {
+    color: var(--texto-principal);
+}
+
+.marca-acento {
+    color: var(--acento-hover);
 }
 
 .enlaces-nav {
@@ -357,7 +401,7 @@ body.pagina-inicio {
 .boton-nav {
     background-color: var(--acento-suave);
     color: var(--acento-primario);
-    border: 1px solid rgba(56, 189, 248, 0.35);
+    border: 1px solid rgba(184, 108, 255, 0.35);
     padding: 8px 16px;
     border-radius: 7px;
     text-decoration: none;
@@ -395,7 +439,7 @@ body.pagina-inicio {
     border-radius: 999px;
     background-color: var(--acento-suave);
     color: var(--acento-primario);
-    border: 1px solid rgba(56, 189, 248, 0.3);
+    border: 1px solid rgba(184, 108, 255, 0.3);
     font-size: 12.5px;
     font-weight: bold;
     margin-bottom: 12px;
@@ -439,15 +483,18 @@ body.pagina-inicio {
     transition: var(--transicion);
 }
 
+/* Botón principal: Crear mi cuenta */
+
 .boton-inicio.primario {
-    background-color: var(--acento-primario);
-    color: var(--texto-oscuro);
+    background-color: var(--boton-principal);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .boton-inicio.primario:hover {
-    background-color: var(--acento-hover);
+    background-color: var(--boton-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(56, 189, 248, 0.25);
+    box-shadow: 0 6px 16px rgba(46, 160, 67, 0.22);
 }
 
 .boton-inicio.primario:active {
@@ -527,7 +574,7 @@ body.pagina-inicio {
     border-radius: 50%;
     background-color: var(--acento-suave);
     color: var(--acento-primario);
-    border: 1px solid rgba(56, 189, 248, 0.3);
+    border: 1px solid rgba(184, 108, 255, 0.3);
     font-weight: bold;
     font-size: 13px;
     display: flex;
